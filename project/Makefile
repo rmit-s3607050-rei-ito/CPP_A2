@@ -1,29 +1,38 @@
-# OBJS = obj/main_noncurses.o obj/model.o obj/bst.o
+BIN := draughts
 
-BIN = draughts
+CC := g++
+LD := g++
 
-CC = g++
+SRC_EXT := cpp
 
-SRC_EXT = cpp
+SRC_DIR := src
+OBJ_DIR := obj
 
-SRC_DIR = src
-OBJ_DIR = obj
-
-CFLAGS = -Wall -pedantic -std=c++14 -g -I$(SRC_DIR) -I inc
-# LFLAGS = -lboost_program_options
-
-UNAME_S = $(shell uname -s)
+CFLAGS := -Wall -pedantic -std=c++14 -g -I$(SRC_DIR) -I inc
+LFLAGS =
 
 SOURCES := $(shell find $(SRC_DIR)/ -name '*.$(SRC_EXT)')
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.$(SRC_EXT)=%.o)
 OBJECTS := $(OBJECTS:%.o=$(OBJ_DIR)/%.o)
 DEPS := $(OBJECTS:.o=.d)
 
-test_datastructures : $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ 
+.PHONY: all
+all: $(BIN)
 
-obj/%.o : src/%.cpp
-	$(CC) $(CFLAGS) -c -o $@ $<
+# link objects together to make executable
+$(BIN) : $(OBJECTS)
+	$(LD) -o $(BIN) $(OBJECTS) $(LDFLAGS)
 
-clean :
-	rm -f obj/*.o test_datastructures
+# make objects and dependencies
+$(OBJECTS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.$(SRC_EXT)
+#	if the obj_dir exists -p suppresses the error
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -MP -MMD $< -o $@
+
+# handle dependencies
+-include $(DEPS)
+
+# remove the compiled objects and the binary to clean up
+.PHONY: clean
+clean:
+	rm -f $(OBJECTS) $(BIN)
