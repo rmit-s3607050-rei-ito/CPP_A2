@@ -1,3 +1,15 @@
+
+/* COSC1254 - Programming using C++ - Assignment 2
+ * Assignment done as a pair
+ * -----------------------------------------------------------------------------
+ * Name             : Rei Ito
+ * Student Number   : s3607050
+ * -----------------------------------------------------------------------------
+ * Name             : Pacific Thai
+ * Student Number   : s3429648
+ * -----------------------------------------------------------------------------
+ */
+
 #include "window.h"
 #include <map>
 #include <string>
@@ -26,7 +38,7 @@ namespace draughts
             player_selection_window(const player_map&);
             virtual void activate(void) override;
             std::string players_to_string(void);
-            static std::vector<std::string> player_strings(const player_map&, 
+            static std::vector<std::string> player_strings(const player_map&,
                 player_map&);
             static std::vector<std::unique_ptr<nc_controller::command>>
                 create_actions(const player_map&, player_map&);

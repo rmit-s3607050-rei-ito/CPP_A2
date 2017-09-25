@@ -1,3 +1,15 @@
+
+/* COSC1254 - Programming using C++ - Assignment 2
+ * Assignment done as a pair
+ * -----------------------------------------------------------------------------
+ * Name             : Rei Ito
+ * Student Number   : s3607050
+ * -----------------------------------------------------------------------------
+ * Name             : Pacific Thai
+ * Student Number   : s3429648
+ * -----------------------------------------------------------------------------
+ */
+
 #include <vector>
 #include <memory>
 #include <utility>
@@ -9,6 +21,9 @@
 
 // Random for selecting which player will go first
 #include <random>
+
+// Players in game and tokens on the board
+#include "player.h"
 
 #pragma once
 
@@ -28,12 +43,9 @@ namespace draughts
         int width;
         int height;
         // Player stats:
-        /* NOTE: since there are only two players, we have just decided to go
-         * with pairs of variables for each, in games that have more params/players,
-         * it would be better to use another completely separate class for it */
-        int player1, player2;
-        int p1Score, p2Score;
-        int currentPlayer;
+        player *currentPlayer;  // Pointer to which player is taking their turn
+        player player1;
+        player player2;
 
       // map of players, datastructure map is used due to get_player_list() type
       std::map<int, std::string> playerList;
@@ -45,26 +57,29 @@ namespace draughts
       bool player_exists(const std::string&);
 
       public:
+        // Model instance related functions
+        static model * get_instance(void);
+        static void delete_instance(void);
+        virtual ~model(void);
+
         // Game related functions
         void start_game(int, int);
-        char get_token(int,int);
         void make_move(int, int, int, int, int);
+        int get_winner();
 
         // Player related functions
-        bool add_player(const std::string &);
+        int get_player_count();
         int get_player_score(int);
         int get_current_player(void);
         std::string get_player_name(int);
         std::map<int, std::string> get_player_list(void) const;
-        int get_winner();
+        bool add_player(const std::string &);
 
-        // Game related related functions
-        int get_player_count();
+        // Board related functions
+        //void init_board(void);
         int get_width();
         int get_height();
-        static model * get_instance(void);
-        static void delete_instance(void);
-        virtual ~model(void);
+        char get_token(int,int);
     };
   }
 }

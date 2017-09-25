@@ -1,3 +1,15 @@
+
+/* COSC1254 - Programming using C++ - Assignment 2
+ * Assignment done as a pair
+ * -----------------------------------------------------------------------------
+ * Name             : Rei Ito
+ * Student Number   : s3607050
+ * -----------------------------------------------------------------------------
+ * Name             : Pacific Thai
+ * Student Number   : s3429648
+ * -----------------------------------------------------------------------------
+ */
+
 #include <cstdlib>
 #include <memory>
 #include <map>
@@ -37,7 +49,7 @@ namespace draughts
         };
 
         struct newgame_command : public command
-        {          
+        {
             virtual void operator()(void) override
             {
                 view->play_game();
@@ -64,7 +76,7 @@ namespace draughts
             int index;
             public:
             select_player_command(
-                    const std::map<int, std::string>& players, 
+                    const std::map<int, std::string>& players,
                     std::map<int, std::string>& selected, int ind)
 
                 : players_ref(players), selected_ref(selected), index(ind)
@@ -73,7 +85,7 @@ namespace draughts
 
             virtual void operator()(void) override
             {
-                const std::map<int, std::string>::const_iterator needle 
+                const std::map<int, std::string>::const_iterator needle
                     = players_ref.find(index);
                 if(needle == players_ref.cend())
                 {

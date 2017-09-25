@@ -1,3 +1,15 @@
+
+/* COSC1254 - Programming using C++ - Assignment 2
+ * Assignment done as a pair
+ * -----------------------------------------------------------------------------
+ * Name             : Rei Ito
+ * Student Number   : s3607050
+ * -----------------------------------------------------------------------------
+ * Name             : Pacific Thai
+ * Student Number   : s3429648
+ * -----------------------------------------------------------------------------
+ */
+
 #include "game_window.h"
 #include "../model/model.h"
 
@@ -14,9 +26,9 @@ void draughts::ncview::game_window::activate(void)
     try
     {
       display_board();
-      int playernum = themodel->get_current_player();
-      std::cout << "it is " << themodel->get_player_name(playernum)
-          << " and their score is "
+      playernum = themodel->get_current_player();
+      std::cout << "It is " << themodel->get_player_name(playernum)
+          << "'s turn, their score is "
           << themodel->get_player_score(playernum) << std::endl;
     }
     catch(std::exception & ex)
@@ -46,11 +58,20 @@ std::pair<std::pair<int,int>, std::pair<int,int>>
   std::pair<std::pair<int,int>,std::pair<int,int>> move;
   std::pair<int,int> start;
   std::pair<int,int> end;
-  std::cout << "Please enter your next move: " ;
-  get_input(input);
+
+  /* Changed from:
+   * std::cout << "Please enter your next move: ";
+   * get_input(input);
+   * get_input()'s parameter is a string prompt, so we have no idea why input
+   * was passed into it and why the prompt was placed before it
+   */
+
+  input = window::get_input("Please enter your next move (x,y-x,y): ");
+
   std::vector<std::string> moves;
   std::vector<std::string> coords;
-  boost::split(moves, input, [](char ch){return ch == '-';});
+  boost::split(moves, input, [](char ch) { return ch == '-'; });
+
   start = strtocoord(moves[0]);
   end = strtocoord(moves[1]);
   move = std::make_pair(start, end);
@@ -72,10 +93,13 @@ std::pair<int,int> draughts::ncview::game_window::strtocoord(
     const std::string& input)
 {
   int x, y;
+
   std::vector<std::string> parts;
-  boost::split(parts, input, [](char ch){ return ch == ',';});
+  boost::split(parts, input, [](char ch) { return ch == ','; });
+
   x = stoi(parts[0]);
   y = stoi(parts[1]);
+
   return std::make_pair(x,y);
 }
 
@@ -113,4 +137,9 @@ void draughts::ncview::game_window::display_board(void)
     print_line(themodel->get_width() * 4);
     std::cout << std::endl;
   }
+}
+
+// #################### Validate move input ####################
+bool draughts::ncview::game_window::validate_move_input(const std::string &input){
+
 }
