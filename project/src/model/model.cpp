@@ -90,7 +90,10 @@ int draughts::model::model::get_winner()
 void draughts::model::model::make_move(int playernum, int startx, int starty,
                                                       int endx, int endy)
 {
-  
+  std::cout << "#################### Received: ####################" << std::endl;
+  std::cout << "PlayerNum: " << playernum << std::endl;
+  std::cout << "     Move: " << startx << " , " << starty << std::endl;
+  std::cout << "       To: " << endx << " , " << endy << std::endl;
 }
 
 // #################### Player related functions ####################

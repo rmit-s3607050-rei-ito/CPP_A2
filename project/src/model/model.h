@@ -31,6 +31,9 @@
 const int WIDTH = 8;
 const int HEIGHT = 8;
 
+// input move length, in format x,y-a,b (x,y) = piece to move, (a,b) location to move to
+const int MOVE_INPUT_LENGTH = 7;
+
 namespace draughts
 {
   namespace model
@@ -76,7 +79,6 @@ namespace draughts
         bool add_player(const std::string &);
 
         // Board related functions
-        //void init_board(void);
         int get_width();
         int get_height();
         char get_token(int,int);

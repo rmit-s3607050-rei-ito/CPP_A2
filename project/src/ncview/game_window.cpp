@@ -59,14 +59,18 @@ std::pair<std::pair<int,int>, std::pair<int,int>>
   std::pair<int,int> start;
   std::pair<int,int> end;
 
-  /* Changed from:
+  bool validInput = false;
+  /* NOTE: Changed from:
    * std::cout << "Please enter your next move: ";
    * get_input(input);
    * get_input()'s parameter is a string prompt, so we have no idea why input
    * was passed into it and why the prompt was placed before it
    */
 
-  input = window::get_input("Please enter your next move (x,y-x,y): ");
+  while (!validInput) {
+    input = get_input("Please enter your next move (x,y-x,y): ");
+    validInput = validate_move_input(input);
+  }
 
   std::vector<std::string> moves;
   std::vector<std::string> coords;
@@ -141,5 +145,21 @@ void draughts::ncview::game_window::display_board(void)
 
 // #################### Validate move input ####################
 bool draughts::ncview::game_window::validate_move_input(const std::string &input){
+  bool validMove = false;
+  int inputLength = input.length();
 
+  // Check length: Requires precisely to be 7 characters, format in model.h
+  if(inputLength != MOVE_INPUT_LENGTH)
+    return validMove;
+
+  /* Check characters specifically
+   * For Piece to move: [0] = x coord, [1] = delimeter, [2] = y coord
+   * To separate: [3] = "-" delimeter
+   * Location to move to: [4] = x coord, [5] = delimeter, [6] = y coord
+   */
+
+  
+
+
+  return validMove;
 }
