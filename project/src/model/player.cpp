@@ -10,7 +10,6 @@
  * -----------------------------------------------------------------------------
  */
 
-#include <iostream>
 #include "player.h"
 
 // Constructor, set initial score to 0, number of tokens in possession 12
@@ -44,6 +43,13 @@ void draughts::model::player::reduce_num_tokens(int tokenChange) {
 
 void draughts::model::player::update_player_score(int scoreChange) {
   playerScore += scoreChange;
+}
+
+char draughts::model::player::get_token_char(void){
+  if (pType == p1)
+    return NORMAL_P1_TOKEN;
+  else
+    return NORMAL_P2_TOKEN;
 }
 
 // #################### Player's tokens related functions ####################

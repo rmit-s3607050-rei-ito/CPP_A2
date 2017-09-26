@@ -77,6 +77,7 @@ namespace draughts
         std::string get_player_name(int);
         std::map<int, std::string> get_player_list(void) const;
         bool add_player(const std::string &);
+        char get_current_player_token(void);
 
         // Board related functions
         int get_width();

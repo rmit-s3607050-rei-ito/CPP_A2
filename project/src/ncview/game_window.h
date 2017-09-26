@@ -16,6 +16,10 @@
 #include <utility>
 #include <boost/algorithm/string.hpp>
 
+// Regular expression for input validation
+#include <regex>
+const std::string MOVE_REGEX = "[1-8],[1-8]-[1-8],[1-8]";
+
 namespace draughts
 {
   namespace ncview
@@ -33,7 +37,7 @@ namespace draughts
       std::pair<std::pair<int,int>, std::pair<int,int>> get_move_input(void);
       std::pair<int,int> strtocoord(const std::string&);
 
-      // Added function
+      // Added function, input validation
       bool validate_move_input(const std::string &);
 
       public:

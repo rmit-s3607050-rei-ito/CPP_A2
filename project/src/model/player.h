@@ -54,6 +54,7 @@ namespace draughts
         void initialize(int, playerType);
         void reduce_num_tokens(int);
         void update_player_score(int);
+        char get_token_char(void);
         // Player's tokens
         void init_tokens(void);
         // TODO x2

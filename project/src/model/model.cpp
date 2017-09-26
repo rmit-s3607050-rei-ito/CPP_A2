@@ -94,6 +94,8 @@ void draughts::model::model::make_move(int playernum, int startx, int starty,
   std::cout << "PlayerNum: " << playernum << std::endl;
   std::cout << "     Move: " << startx << " , " << starty << std::endl;
   std::cout << "       To: " << endx << " , " << endy << std::endl;
+
+  
 }
 
 // #################### Player related functions ####################
@@ -168,6 +170,10 @@ bool draughts::model::model::add_player(const std::string& p)
   playerCount++;
 
   return true;
+}
+
+char draughts::model::model::get_current_player_token(){
+  return currentPlayer->get_token_char();
 }
 
 // #################### Board related functions ####################

@@ -28,8 +28,9 @@ void draughts::ncview::game_window::activate(void)
       display_board();
       playernum = themodel->get_current_player();
       std::cout << "It is " << themodel->get_player_name(playernum)
-          << "'s turn, their score is "
-          << themodel->get_player_score(playernum) << std::endl;
+          << "'s turn (" << themodel->get_current_player_token()
+          << "), their score is " << themodel->get_player_score(playernum)
+          << std::endl;
     }
     catch(std::exception & ex)
     {
@@ -68,7 +69,7 @@ std::pair<std::pair<int,int>, std::pair<int,int>>
    */
 
   while (!validInput) {
-    input = get_input("Please enter your next move (x,y-x,y): ");
+    input = get_input("Please enter your next move, Format = x,y-x,y: ");
     validInput = validate_move_input(input);
   }
 
@@ -146,20 +147,13 @@ void draughts::ncview::game_window::display_board(void)
 // #################### Validate move input ####################
 bool draughts::ncview::game_window::validate_move_input(const std::string &input){
   bool validMove = false;
-  int inputLength = input.length();
+  std::regex moveCheck(MOVE_REGEX);
+  std::string invalidMove = "Invalid Move, Numbers for x and y must be between 1-8";
 
-  // Check length: Requires precisely to be 7 characters, format in model.h
-  if(inputLength != MOVE_INPUT_LENGTH)
-    return validMove;
-
-  /* Check characters specifically
-   * For Piece to move: [0] = x coord, [1] = delimeter, [2] = y coord
-   * To separate: [3] = "-" delimeter
-   * Location to move to: [4] = x coord, [5] = delimeter, [6] = y coord
-   */
-
-  
-
+  if (std::regex_match(input, moveCheck))
+    validMove = true;
+  else
+    std::cout << invalidMove << std::endl;
 
   return validMove;
 }
