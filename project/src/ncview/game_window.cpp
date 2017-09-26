@@ -69,7 +69,7 @@ std::pair<std::pair<int,int>, std::pair<int,int>>
    */
 
   while (!validInput) {
-    input = get_input("Please enter your next move, Format = x,y-x,y: ");
+    input = get_input("Please enter your next move, Format = x,y-x,y");
     validInput = validate_move_input(input);
   }
 
