@@ -69,20 +69,35 @@ void draughts::model::model::start_game(int plr1, int plr2)
   // Create random seed
   srand(time(NULL));
 
-  // 1. Assign id to players and initialize type. Internally set up tokens
-  player1.initialize(plr1, p1);
-  player2.initialize(plr2, p2);
+  // 1. initialize board
+  init_board();
 
-  // 2. Randomly decide which player will go first (pseudo random)
+  // 2. Allocate type for players
+  xPlayer.set_type(x);
+  oPlayer.set_type(o);
+
+  // 3. Randomly decide which player is assigned to 'x' and 'o' tokens
   int startingPlayer = rand() % 2;
-  if (startingPlayer == 0)
-    currentPlayer = &player1;
-  else
-    currentPlayer = &player2;
+  if (startingPlayer == 0) {
+    xPlayer.set_id(plr1);
+    oPlayer.set_id(plr2);
+  } else {
+    xPlayer.set_id(plr2);
+    oPlayer.set_id(plr1);
+  }
 
+  // Given the rules, the player with x tokens always go first
+  currentPlayer = &xPlayer;
 }
 
-int draughts::model::model::get_winner()
+void draughts::model::model::swap_current_player(void){
+  if(currentPlayer == &xPlayer)
+    currentPlayer = &oPlayer;
+  else
+    currentPlayer = &xPlayer;
+}
+
+int draughts::model::model::get_winner(void)
 {
   return EOF;
 }
@@ -95,13 +110,15 @@ void draughts::model::model::make_move(int playernum, int startx, int starty,
   std::cout << "     Move: " << startx << " , " << starty << std::endl;
   std::cout << "       To: " << endx << " , " << endy << std::endl;
 
-  
+  // 1. Check if player selected a token that belongs to them
+
+  //currentPlayer.validate_selection(startx, starty);
 }
 
 // #################### Player related functions ####################
 /*  NOTE: return type changed from void to bool, to determine whether add player
  * was successful, false = could not add new player, true = added to list */
-int draughts::model::model::get_player_count()
+int draughts::model::model::get_player_count(void)
 {
  return playerCount;
 }
@@ -110,10 +127,10 @@ int draughts::model::model::get_player_score(int playernum)
 {
   /* NOTE: Assumes only scores are tracked for the two players in game, not players
    * present in list. Compares ID with playernum, return their matching score */
-  if (playernum == player1.get_player_ID())
-    return player1.get_player_score();
+  if (playernum == xPlayer.get_player_ID())
+    return xPlayer.get_player_score();
   else
-    return player2.get_player_score();
+    return oPlayer.get_player_score();
 }
 
 int draughts::model::model::get_current_player(void)
@@ -177,40 +194,51 @@ char draughts::model::model::get_current_player_token(){
 }
 
 // #################### Board related functions ####################
-int draughts::model::model::get_width()
+void draughts::model::model::init_board(void) {
+  token empty, nCross, nCircle;
+  empty.set_type(EMPTY);
+  nCross.set_type(N_CROSS);
+  nCircle.set_type(N_CIRCLE);
+
+  for(int row = 0; row < WIDTH; row++) {
+    for (int col = 0; col < HEIGHT; col++) {
+      // Fill gaps between tokens with empty spaces
+      if(((col + row) % 2) == 0) {
+        board[row][col] = empty;
+      } else {
+        // Initialize middle rows (3 and 4) as empty
+        if (row > X_END && row < O_START) {
+          board[row][col] = empty;
+        }
+        // Initialize 'x' tokens
+        else if (row <= X_END) {
+          board[row][col] = nCross;
+        }
+        // Initialize 'o' tokens
+        else {
+          board[row][col] = nCircle;
+        }
+      }
+    }
+  }
+}
+
+int draughts::model::model::get_width(void)
 {
   return width;
 }
 
-int draughts::model::model::get_height()
+int draughts::model::model::get_height(void)
 {
   return height;
 }
 
 char draughts::model::model::get_token(int x ,int y)
 {
-  int xPos, yPos;
+  // Since array starts from 0, we need to minus 1 from input
+  int xPos = x-1;
+  int yPos = y-1;
 
-  std::list<token> p1Tokens = player1.get_tokens();
-  std::list<token> p2Tokens = player2.get_tokens();
-
-  // Look for token in list of tokens for both players
-  for(token t : p1Tokens) {
-    xPos = t.get_x_pos();
-    yPos = t.get_y_pos();
-
-    if(xPos == x && yPos == y)
-      return t.print_token();
-  }
-
-  for(token t : p2Tokens) {
-    xPos = t.get_x_pos();
-    yPos = t.get_y_pos();
-
-    if(xPos == x && yPos == y)
-      return t.print_token();
-  }
-
-  // Return blank when token not found
-  return EMPTY;
+  token gameToken = board[xPos][yPos];
+  return gameToken.print_token();
 }

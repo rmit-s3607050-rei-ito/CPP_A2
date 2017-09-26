@@ -12,36 +12,40 @@
 
 #include "token.h"
 
-// Constructor, allocates x, y, type and owner
-draughts::model::token::token(int xPos, int yPos, tokenType tType) :
-                                  x(xPos), y(yPos), pieceType(tType)
+// Constructor, allocates type
+draughts::model::token::token(void) : tokenType(EMPTY)
 {
 }
 
 // #################### Getters and Setters ####################
-int draughts::model::token::get_x_pos(void) {
-  return x;
+type draughts::model::token::get_type(void) {
+  return tokenType;
 }
 
-int draughts::model::token::get_y_pos(void) {
-  return y;
-}
-
-tokenType draughts::model::token::get_type(void) {
-  return pieceType;
+void draughts::model::token::set_type(type t){
+  tokenType = t;
 }
 
 // #################### Other functions ####################
 char draughts::model::token::print_token(void) {
-  // Player 1's token
-  if(pieceType == p1Normal)
-    return NORMAL_P1_TOKEN;
-  else if (pieceType == p1King)
-    return KING_P1_TOKEN;
+  char token = EMPTY_TOKEN;
 
-  // Player 2's token
-  else if (pieceType == p2Normal)
-    return NORMAL_P2_TOKEN;
-  else
-    return KING_P2_TOKEN;
+  switch(tokenType) {
+    case N_CIRCLE:
+      token = N_O_TOKEN;
+      break;
+    case K_CIRCLE:
+      token = K_O_TOKEN;
+      break;
+    case N_CROSS:
+      token = N_X_TOKEN;
+      break;
+    case K_CROSS:
+      token = K_X_TOKEN;
+      break;
+    case EMPTY:
+      break;
+  }
+
+  return token;
 }

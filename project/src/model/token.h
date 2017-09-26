@@ -13,13 +13,13 @@
 #pragma once
 
 // What board elements appear as
-const char NORMAL_P1_TOKEN = 'o';
-const char KING_P1_TOKEN = 'O';
-const char NORMAL_P2_TOKEN = 'x';
-const char KING_P2_TOKEN = 'X';
-const char EMPTY = ' ';
+const char N_O_TOKEN = 'o';
+const char K_O_TOKEN = 'O';
+const char N_X_TOKEN = 'x';
+const char K_X_TOKEN = 'X';
+const char EMPTY_TOKEN = ' ';
 
-enum tokenType { p1Normal, p1King, p2Normal, p2King };
+enum type { N_CIRCLE, K_CIRCLE, N_CROSS, K_CROSS, EMPTY };
 
 namespace draughts
 {
@@ -27,17 +27,14 @@ namespace draughts
   {
     class token {
       private:
-        int x;
-        int y;
-        tokenType pieceType;     // Whether piece is normal or king, also factor player
+        type tokenType;     // Whether piece is normal or king, also factor player
 
       public:
         // Constructor
-        token(int, int, tokenType);
+        token(void);
         // Getters/Settters
-        int get_x_pos(void);
-        int get_y_pos(void);
-        tokenType get_type(void);
+        type get_type(void);
+        void set_type(type);
         // Return specific character for token
         char print_token(void);
     };
