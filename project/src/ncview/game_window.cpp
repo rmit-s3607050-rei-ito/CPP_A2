@@ -20,6 +20,7 @@ draughts::ncview::game_window::game_window(const player_pair & theplayers)
 
 void draughts::ncview::game_window::activate(void)
 {
+  bool validMove = false;
   while(!quit)
   {
     int playernum = EOF;
@@ -39,11 +40,15 @@ void draughts::ncview::game_window::activate(void)
     }
     try
     {
-      std::pair<std::pair<int,int>,std::pair<int,int>> move_coords;
-      move_coords = get_move_input();
-      themodel->make_move(playernum,
-                          move_coords.first.first,  move_coords.first.second,
-                          move_coords.second.first, move_coords.second.second);
+      while (!validMove) {
+        std::pair<std::pair<int,int>,std::pair<int,int>> move_coords;
+        move_coords = get_move_input();
+        validMove = themodel->make_move(
+                            move_coords.first.first,  move_coords.first.second,
+                            move_coords.second.first, move_coords.second.second);
+      }
+      validMove = false;
+      themodel->swap_current_player();
     }
     catch(std::exception& ex)
     {

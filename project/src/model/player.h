@@ -19,8 +19,6 @@ const int NUM_STARTING_TOKENS = 12;
 
 #pragma once
 
-enum playerType { x, o };
-
 namespace draughts
 {
   namespace model
@@ -30,19 +28,20 @@ namespace draughts
         int playerID;
         int playerScore;
         int numTokens;
-        playerType pType;
+        type playerType;
 
       public:
         // Constructor
         player(void);
         // Getters/Settters
-        int get_player_ID(void);
-        int get_player_score(void);
+        int get_id(void);
+        int get_score(void);
+        type get_type(void);
         void set_id(int);
-        void set_type(playerType);
+        void set_score(int);
+        void set_type(type);
         void reduce_num_tokens(int);
         void update_player_score(int);
-        char get_token_char(void);
         // TODO x2
         // void promote_token(void);
         // void remove_token(void);

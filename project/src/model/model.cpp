@@ -73,8 +73,8 @@ void draughts::model::model::start_game(int plr1, int plr2)
   init_board();
 
   // 2. Allocate type for players
-  xPlayer.set_type(x);
-  oPlayer.set_type(o);
+  xPlayer.set_type(N_CROSS);
+  oPlayer.set_type(N_CIRCLE);
 
   // 3. Randomly decide which player is assigned to 'x' and 'o' tokens
   int startingPlayer = rand() % 2;
@@ -102,15 +102,40 @@ int draughts::model::model::get_winner(void)
   return EOF;
 }
 
-void draughts::model::model::make_move(int playernum, int startx, int starty,
-                                                      int endx, int endy)
+bool draughts::model::model::make_move(int startx, int starty, int endx, int endy)
 {
-  std::cout << "#################### Received: ####################" << std::endl;
-  std::cout << "PlayerNum: " << playernum << std::endl;
-  std::cout << "     Move: " << startx << " , " << starty << std::endl;
-  std::cout << "       To: " << endx << " , " << endy << std::endl;
+  //std::cout << "#################### Received: ####################" << std::endl;
+  //std::cout << "PlayerNum: " << playernum << std::endl;
+  //std::cout << "     Move: " << startx << " , " << starty << std::endl;
+  //std::cout << "       To: " << endx << " , " << endy << std::endl;
 
   // 1. Check if player selected a token that belongs to them
+  if (startx == endx && starty == endy) {
+    std::cout << "Invalid move, start and end are the same." << std::endl;
+    return false;
+  }
+  else if (currentPlayer->get_type() == N_CROSS) {
+    if (board[startx][starty].get_type() == N_CROSS) {
+      // check if piece can move
+      return true;
+    } else if (board[startx][starty].get_type() == K_CROSS) {
+      return true;
+    } else {
+      std::cout << "Invalid start, other player or empty square" << std::endl;
+      return false;
+    }
+  } else {
+    if (board[startx][starty].get_type() == N_CIRCLE) {
+      return true;
+    } else if (board[startx][starty].get_type() == K_CIRCLE) {
+      return true;
+    } else {
+      std::cout << "Invalid start, other player or empty square" << std::endl;
+      return false;
+    }
+  }
+
+  return false;
 
   //currentPlayer.validate_selection(startx, starty);
 }
@@ -127,16 +152,16 @@ int draughts::model::model::get_player_score(int playernum)
 {
   /* NOTE: Assumes only scores are tracked for the two players in game, not players
    * present in list. Compares ID with playernum, return their matching score */
-  if (playernum == xPlayer.get_player_ID())
-    return xPlayer.get_player_score();
+  if (playernum == xPlayer.get_id())
+    return xPlayer.get_score();
   else
-    return oPlayer.get_player_score();
+    return oPlayer.get_score();
 }
 
 int draughts::model::model::get_current_player(void)
 {
   // Return ID of current player
-  return currentPlayer->get_player_ID();
+  return currentPlayer->get_id();
 }
 
 std::string draughts::model::model::get_player_name(int id)
@@ -189,8 +214,8 @@ bool draughts::model::model::add_player(const std::string& p)
   return true;
 }
 
-char draughts::model::model::get_current_player_token(){
-  return currentPlayer->get_token_char();
+char draughts::model::model::get_current_player_token() {
+  return (currentPlayer->get_type() == N_CROSS) ? N_X_TOKEN : N_O_TOKEN;
 }
 
 // #################### Board related functions ####################

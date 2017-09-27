@@ -19,20 +19,28 @@ draughts::model::player::player(void) : playerScore(0), numTokens(NUM_STARTING_T
 
 // #################### Getters and Setters ####################
 
-int draughts::model::player::get_player_ID(void) {
+int draughts::model::player::get_id(void) {
   return playerID;
 }
 
-int draughts::model::player::get_player_score(void) {
+int draughts::model::player::get_score(void) {
   return playerScore;
+}
+
+type draughts::model::player::get_type(void){
+  return playerType;
 }
 
 void draughts::model::player::set_id(int pID) {
   playerID = pID;
 }
 
-void draughts::model::player::set_type(playerType pt) {
-  pType = pt;
+void draughts::model::player::set_score(int score) {
+  playerScore = score;
+}
+
+void draughts::model::player::set_type(type ttype) {
+  playerType = ttype;
 }
 
 void draughts::model::player::reduce_num_tokens(int tokenChange) {
@@ -41,13 +49,6 @@ void draughts::model::player::reduce_num_tokens(int tokenChange) {
 
 void draughts::model::player::update_player_score(int scoreChange) {
   playerScore += scoreChange;
-}
-
-char draughts::model::player::get_token_char(void){
-  if (pType == x)
-    return N_X_TOKEN;
-  else
-    return N_O_TOKEN;
 }
 
 // #################### Player's tokens related functions ####################

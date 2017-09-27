@@ -71,7 +71,7 @@ namespace draughts
 
         // Game related functions
         void start_game(int, int);
-        void make_move(int, int, int, int, int);
+        bool make_move(int, int, int, int);
         void swap_current_player(void);
         int get_winner(void);
 
