@@ -25,7 +25,8 @@ namespace draughts
 {
   namespace model
   {
-    class token {
+    class token
+    {
       private:
         type tokenType;     // Whether piece is normal or king, also factor player
 

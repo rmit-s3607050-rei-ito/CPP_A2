@@ -23,9 +23,7 @@ void draughts::ncview::add_player_window::activate(void)
 
   while(!success){
     try {
-      name = window::get_input(
-         "Please enter the name for the new player"
-      );
+      name = window::get_input("Please enter the name for the new player");
       draughts::model::model * themodel = draughts::model::model::get_instance();
       success = themodel->add_player(name);
     }

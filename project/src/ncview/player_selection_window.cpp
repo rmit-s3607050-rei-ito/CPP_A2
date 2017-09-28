@@ -16,9 +16,7 @@
 
 // Constructor for player_selection_window with default params: window(), full_list
 draughts::ncview::player_selection_window::player_selection_window(
-        const player_map& players_list
-        )
-    : window(), full_list(players_list)
+  const player_map& players_list) : window(), full_list(players_list)
 {
 }
 
@@ -26,7 +24,7 @@ std::string draughts::ncview::player_selection_window::players_to_string(void)
 {
   std::ostringstream out;
   for(auto pair : selected_list){
-      out << pair.second << " ";
+    out << pair.second << " ";
   }
   return out.str();
 }
@@ -77,7 +75,7 @@ void draughts::ncview::player_selection_window::activate(void)
 
 std::vector<std::string>
 draughts::ncview::player_selection_window::player_strings(
-        const player_map& all_players, player_map& selected)
+  const player_map& all_players, player_map& selected)
 {
   int size = all_players.size();
   int count = 0;
@@ -98,7 +96,7 @@ draughts::ncview::player_selection_window::player_strings(
 
 std::vector<std::unique_ptr<draughts::nc_controller::command>>
 draughts::ncview::player_selection_window::create_actions(
-        const player_map& all_players, player_map & selected)
+  const player_map& all_players, player_map & selected)
 {
   std::vector<std::unique_ptr<nc_controller::command>> commands;
   for(auto & pair : all_players)

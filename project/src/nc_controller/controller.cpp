@@ -53,11 +53,11 @@ draughts::nc_controller::controller::get_main_menu_commands(void)
 
 void draughts::nc_controller::controller::delete_instance(void)
 {
-    instance.reset(nullptr);
+  instance.reset(nullptr);
 }
 
 void draughts::nc_controller::controller::start_game(
-    std::map<int, std::string> players)
+  std::map<int, std::string> players)
 {
   std::vector<int> ids;
   using player = std::pair<int, std::string>;

@@ -135,6 +135,8 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
     }
   }
 
+  
+
   return false;
 
   //currentPlayer.validate_selection(startx, starty);
@@ -145,7 +147,7 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
  * was successful, false = could not add new player, true = added to list */
 int draughts::model::model::get_player_count(void)
 {
- return playerCount;
+  return playerCount;
 }
 
 int draughts::model::model::get_player_score(int playernum)
@@ -220,29 +222,21 @@ char draughts::model::model::get_current_player_token() {
 
 // #################### Board related functions ####################
 void draughts::model::model::init_board(void) {
-  token empty, nCross, nCircle;
-  empty.set_type(EMPTY);
-  nCross.set_type(N_CROSS);
-  nCircle.set_type(N_CIRCLE);
-
   for(int row = 0; row < WIDTH; row++) {
     for (int col = 0; col < HEIGHT; col++) {
       // Fill gaps between tokens with empty spaces
       if(((col + row) % 2) == 0) {
-        board[row][col] = empty;
+        board[row][col].set_type(EMPTY);
       } else {
         // Initialize middle rows (3 and 4) as empty
-        if (row > X_END && row < O_START) {
-          board[row][col] = empty;
-        }
+        if (row > X_END && row < O_START)
+          board[row][col].set_type(EMPTY);
         // Initialize 'x' tokens
-        else if (row <= X_END) {
-          board[row][col] = nCross;
-        }
+        else if (row <= X_END)
+          board[row][col].set_type(N_CROSS);
         // Initialize 'o' tokens
-        else {
-          board[row][col] = nCircle;
-        }
+        else
+          board[row][col].set_type(N_CIRCLE);
       }
     }
   }

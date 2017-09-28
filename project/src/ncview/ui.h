@@ -19,36 +19,30 @@
 
 namespace draughts
 {
-    namespace nc_controller
+  namespace nc_controller
+  {
+    class controller;
+  }
+  namespace model
+  {
+    class model;
+  }
+  namespace ncview
+  {
+    class ui
     {
-        class controller;
-    }
-    namespace model
-    {
-        class model;
-    }
-    namespace ncview
-    {
-        class ui
-        {
-            draughts::nc_controller::controller * thecontroller;
-            draughts::model::model * themodel;
-            ui(void);
-            static std::unique_ptr<ui> instance;
-            public:
-                void main_menu(void);
-
-                void add_player(void);
-
-                void play_game(void);
-
-                void show_game_window(player_pair);
-
-                static ui* get_instance();
-
-                static void delete_instance(void);
-
-                virtual ~ui(void);
-        };
-    }
+      draughts::nc_controller::controller * thecontroller;
+      draughts::model::model * themodel;
+      ui(void);
+      static std::unique_ptr<ui> instance;
+      public:
+        void main_menu(void);
+        void add_player(void);
+        void play_game(void);
+        void show_game_window(player_pair);
+        static ui* get_instance(void);
+        static void delete_instance(void);
+        virtual ~ui(void);
+    };
+  }
 }
