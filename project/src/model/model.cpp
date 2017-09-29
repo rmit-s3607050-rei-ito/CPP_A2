@@ -120,16 +120,10 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
   else { // 2. Check if player selected right token
     validSelection = gameBoard.check_valid_selection(playerType, startx, starty);
 
-<<<<<<< HEAD
     // When right token selected, check if they entered in a possible move
     if (validSelection)
       validMove = gameBoard.check_valid_move(startx, starty, endx, endy);
   }
-=======
-  
-
-  return false;
->>>>>>> c80b0ff320fea8b37066618a0a9081e68f31c63e
 
   // When all checks have been passed move the token and swap players
   if(validMove) {
@@ -237,34 +231,11 @@ char draughts::model::model::get_current_player_token() {
   return (currentPlayer->get_type() == N_CROSS) ? N_X_TOKEN : N_O_TOKEN;
 }
 
-<<<<<<< HEAD
 void draughts::model::model::reduce_player_tokens(int tokenChange) {
   if(currentPlayer == &xPlayer)
     oPlayer.reduce_num_tokens(tokenChange);
   else
     xPlayer.reduce_num_tokens(tokenChange);
-=======
-// #################### Board related functions ####################
-void draughts::model::model::init_board(void) {
-  for(int row = 0; row < WIDTH; row++) {
-    for (int col = 0; col < HEIGHT; col++) {
-      // Fill gaps between tokens with empty spaces
-      if(((col + row) % 2) == 0) {
-        board[row][col].set_type(EMPTY);
-      } else {
-        // Initialize middle rows (3 and 4) as empty
-        if (row > X_END && row < O_START)
-          board[row][col].set_type(EMPTY);
-        // Initialize 'x' tokens
-        else if (row <= X_END)
-          board[row][col].set_type(N_CROSS);
-        // Initialize 'o' tokens
-        else
-          board[row][col].set_type(N_CIRCLE);
-      }
-    }
-  }
->>>>>>> c80b0ff320fea8b37066618a0a9081e68f31c63e
 }
 
 // #################### Board related functions ####################
