@@ -46,7 +46,11 @@ void draughts::model::board::init_board() {
     }
   }
 
+  gameBoard[3][0] = nCross;
+  gameBoard[5][4] = nCross;
+
   gameBoard[4][1] = nCircle;
+  gameBoard[6][1] = nCircle;
   gameBoard[6][3] = nCircle;
 }
 
@@ -262,10 +266,11 @@ bool draughts::model::board::can_jump(int row, int col, int endX, int endY) {
   typeJumpedOver = get_type(coords.first, coords.second);
 
   // Is its type the same as current token? if so there is a possible jump
-  if (!validate_type(currentType, typeJumpedOver)) {
+  if (typeJumpedOver != EMPTY && !validate_type(currentType, typeJumpedOver)) {
     // Print message saying that there's a possible jump
-    std::cout << jumpMsg << coords.first << "," << coords.second <<
-      " landing at cell: " << endX + ARRAY_DIFF << "," << endY + ARRAY_DIFF <<
+    std::cout << jumpMsg << row + ARRAY_DIFF << ","
+                         << col + ARRAY_DIFF << " landing at cell: "
+                         << endX + ARRAY_DIFF << "," << endY + ARRAY_DIFF <<
     std::endl;
     gameBoard[endX][endY].add_possible_jump(endX, endY);
     return true;
