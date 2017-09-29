@@ -124,7 +124,17 @@ void draughts::ncview::game_window::print_row(int rownum)
   std::cout << rownum + 1;
   for(xcount = 0; xcount < themodel->get_width(); ++xcount)
   {
-    std::cout << " " << themodel->get_token(rownum + 1, xcount + 1) << " |";
+    std::string token;
+    if (themodel->get_token(rownum + 1, xcount + 1) == 'x'
+    ||themodel->get_token(rownum + 1, xcount + 1) == 'X') {
+      token = "\033[31m";
+      token.append(1, themodel->get_token(rownum + 1, xcount + 1));
+      token.append("\033[0m");
+    }
+    else {
+      token = themodel->get_token(rownum + 1, xcount + 1);
+    }
+    std::cout << " " << token << " |";
   }
   std::cout << std::endl;
 }

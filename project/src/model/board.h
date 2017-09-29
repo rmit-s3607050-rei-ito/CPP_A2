@@ -51,7 +51,7 @@ namespace draughts
         // Constructor
         board(void);
         // Initialization and validation
-        void init_board();
+        void init_board(void);
         bool check_valid_selection(type, int, int);
         bool check_valid_move(int, int, int, int);
         bool validate_type(type, type);
