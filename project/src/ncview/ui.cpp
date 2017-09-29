@@ -13,12 +13,11 @@
 #include "ui.h"
 #include "../nc_controller/controller.h"
 #include "../model/model.h"
-std::unique_ptr<draughts::ncview::ui> draughts::ncview::ui::instance =
-    nullptr;
+std::unique_ptr<draughts::ncview::ui> draughts::ncview::ui::instance = nullptr;
 
 draughts::ncview::ui::ui(void)
-    : thecontroller(draughts::nc_controller::controller::get_instance()),
-        themodel(draughts::model::model::get_instance())
+  : thecontroller(draughts::nc_controller::controller::get_instance()),
+  themodel(draughts::model::model::get_instance())
 {
 }
 
@@ -63,7 +62,7 @@ void draughts::ncview::ui::delete_instance(void)
 
 
 void draughts::ncview::ui::show_game_window(draughts::ncview::player_pair
-    players)
+  players)
 {
   game_window newwin(players);
   newwin.activate();

@@ -14,7 +14,7 @@
 #include "../model/model.h"
 
 draughts::ncview::game_window::game_window(const player_pair & theplayers)
-    : players(theplayers), quit(false)
+  : players(theplayers), quit(false)
 {
 }
 
@@ -59,7 +59,7 @@ void draughts::ncview::game_window::activate(void)
 }
 
 std::pair<std::pair<int,int>, std::pair<int,int>>
-    draughts::ncview::game_window::get_move_input(void)
+  draughts::ncview::game_window::get_move_input(void)
 {
   std::string input;
   std::pair<std::pair<int,int>,std::pair<int,int>> move;

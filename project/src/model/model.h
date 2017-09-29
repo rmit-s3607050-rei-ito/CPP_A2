@@ -41,16 +41,25 @@ namespace draughts
         player xPlayer;         // player using 'x' tokens
         player oPlayer;         // player using 'o' tokens
 
+<<<<<<< HEAD
       // array representing the game board and the tokens placed upon it
       board gameBoard;
       // map of players, datastructure map is used due to get_player_list() type
       std::map<int, std::string> playerList;
       // Number of players registered to the system. Allocates ID based on count
       int playerCount;
+=======
+        // array representing the game board and the tokens placed upon it
+        token board[WIDTH][HEIGHT];
+        // map of players, datastructure map is used due to get_player_list() type
+        std::map<int, std::string> playerList;
+        // Number of players registered to the system. Allocates ID based on count
+        int playerCount;
+>>>>>>> c80b0ff320fea8b37066618a0a9081e68f31c63e
 
-      static std::unique_ptr<model> instance;
-      model(void);
-      bool player_exists(const std::string&);
+        static std::unique_ptr<model> instance;
+        model(void);
+        bool player_exists(const std::string&);
 
       public:
         // Model instance related functions

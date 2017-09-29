@@ -23,7 +23,8 @@ namespace draughts
 {
   namespace model
   {
-    class player {
+    class player
+    {
       private:
         int playerID;
         int playerScore;

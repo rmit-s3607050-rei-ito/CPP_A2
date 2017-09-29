@@ -14,11 +14,9 @@
 #include "../nc_controller/command.h"
 
 draughts::ncview::menu::menu(const std::string & thetitle,
-        const std::vector<std::string>& text,
-        draughts::ncview::command_vector commands)
-
-    : title(thetitle), menu_text(text),
-    menu_commands(std::move(commands))
+  const std::vector<std::string>& text,
+  draughts::ncview::command_vector commands) : title(thetitle), menu_text(text),
+  menu_commands(std::move(commands))
 {
 }
 
@@ -80,8 +78,7 @@ void draughts::ncview::menu::set_title(const std::string& newtitle)
   title = newtitle;
 }
 
-void draughts::ncview::menu::set_text(
-        const std::vector<std::string>& newtext)
+void draughts::ncview::menu::set_text( const std::vector<std::string>& newtext)
 {
   menu_text = newtext;
 }

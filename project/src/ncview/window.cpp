@@ -16,8 +16,8 @@
 #include "../nc_controller/command.h"
 
 draughts::ncview::window::window(void)
-    : view(draughts::ncview::ui::get_instance()),
-    themodel(draughts::model::model::get_instance())
+  : view(draughts::ncview::ui::get_instance()),
+  themodel(draughts::model::model::get_instance())
 {
 }
 
@@ -31,7 +31,7 @@ std::string draughts::ncview::window::get_input(const std::string& prompt)
       std::getline(std::cin, input);
       if(input.empty()){
         if(std::cin.eof()){
-            std::cin.clear();
+          std::cin.clear();
         }
         throw input_cancelled();
       }
