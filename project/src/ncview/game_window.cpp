@@ -21,6 +21,8 @@ draughts::ncview::game_window::game_window(const player_pair & theplayers)
 void draughts::ncview::game_window::activate(void)
 {
   bool validMove = false;
+  // bool forcedJump = false;
+
   while(!quit)
   {
     int playernum = EOF;
@@ -32,6 +34,7 @@ void draughts::ncview::game_window::activate(void)
           << "'s turn (" << themodel->get_current_player_token()
           << "), their score is " << themodel->get_player_score(playernum)
           << std::endl;
+      // forcedJump = themodel->check_forced_jump();
     }
     catch(std::exception & ex)
     {

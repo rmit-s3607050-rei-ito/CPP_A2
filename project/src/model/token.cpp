@@ -33,7 +33,18 @@ void draughts::model::token::promote_token(type t) {
     set_type(K_CIRCLE);
 }
 
-// #################### Other functions ####################
+// #################### Jumping related calculations ####################
+
+void draughts::model::token::add_possible_jump(int landX, int landY) {
+  std::pair<int,int> landPos = std::make_pair(landX, landY);
+  possibleJumps.push_back(landPos);
+}
+
+void draughts::model::token::reset_possible_jumps(void) {
+  possibleJumps.clear();
+}
+
+// #################### Display token ####################
 char draughts::model::token::print_token(void) {
   char token = EMPTY_TOKEN;
 
