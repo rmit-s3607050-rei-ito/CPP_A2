@@ -58,7 +58,7 @@ namespace draughts
         // Score related functions
         int move_token(int, int, int, int);
         int promote_token(int, int);
-        bool check_extra_moves(int, int);
+        bool check_possible_jump(void);
         // Getters/Settters
         char get_token(int, int);
         type get_type(int, int);

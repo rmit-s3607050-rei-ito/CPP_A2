@@ -202,13 +202,13 @@ int draughts::model::board::promote_token(int x, int y) {
   return 0;
 }
 
-bool draughts::model::board::check_extra_moves(int x, int y) {
+bool draughts::model::board::check_possible_jump(void) {
   /* Tokens in column 1 can only move rightwards, in column 8 leftwards
    * For the rest they can move left or right */
 
   // Column 1
-  if (y == 0)
-
+  //if (y == 0)
+  return false;
 }
 
 // #################### Getters and Setters ####################

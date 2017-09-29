@@ -139,11 +139,11 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
       // Reduce number of tokens for other player by 1
       reduce_player_tokens(1);
       // TODO: check if any more moves can be made
-      extraMove = gameBoard.check_extra_moves(endx, endy);
+      //extraMove = gameBoard.check_extra_moves(endx, endy);
     }
     // Switch player turn when done
-    if (!extraMove)
-      swap_current_player();
+    //if (!extraMove)
+      //swap_current_player();
   }
   return validMove;
 }

@@ -50,12 +50,16 @@ void draughts::ncview::game_window::activate(void)
       // Reset valid move for next player
       // themodel->swap_current_player();
       validMove = false;
+      // Check if the game has ended or not
+      // quit = themodel->check
     }
     catch(std::exception& ex)
     {
       std::cerr << ex.what() << std::endl;
     }
   }
+  // Obtain winner once game has finished
+  // themodel->get_winner()
 }
 
 std::pair<std::pair<int,int>, std::pair<int,int>>
