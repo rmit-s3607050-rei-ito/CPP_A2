@@ -99,10 +99,10 @@ int draughts::model::model::get_winner(void)
 bool draughts::model::model::make_move(int startx, int starty, int endx, int endy)
 {
   // Same as get_token: since array starts from 0, we need to minus 1 from input
-  startx = startx - ARRAY_DIFF;
-  starty = starty - ARRAY_DIFF;
-  endx = endx - ARRAY_DIFF;
-  endy = endy - ARRAY_DIFF;
+  startx -= ARRAY_DIFF;
+  starty -= ARRAY_DIFF;
+  endx -= ARRAY_DIFF;
+  endy -= ARRAY_DIFF;
 
   bool validSelection = false;        // (startx, starty) validation
   bool validMove = false;             // (endx, endy) validation
