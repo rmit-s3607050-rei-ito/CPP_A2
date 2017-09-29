@@ -14,8 +14,6 @@
 #include <list>
 // Access to tokens as each player has their own set
 #include "token.h"
-// How many tokens a player beings with, when 0 player loses the game
-const int NUM_TOKENS = 12;
 
 #pragma once
 

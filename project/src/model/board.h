@@ -15,29 +15,35 @@
 #include "token.h"
 #include "direction.h"
 #include <iostream>
+#include <list>
 
 // Accounting for array difference (since they start from 0)
 const int ARRAY_DIFF = 1;
-// height/width default to 8 (64 cells)
+// Height/width default to 8 (64 cells)
 const int WIDTH = 8;
 const int HEIGHT = 8;
-// values for initializing board
+// Values for initializing board
 // 'x' tokens from 0 to 2 (display/input = 1 to 3)
 const int X_START = 0;
 const int X_END = 2;
 // 'o' tokens from 5 to 7 (display/input = 6 to 8)
 const int O_START = 5;
 const int O_END = 7;
-// calculating movement on the board
+// Calculating movement on the board
 const int jump = 1;
 const int up = (int)draughts::direction::UP;
 const int down = (int)draughts::direction::DOWN;
 const int upJump = up - jump;
 const int downJump = down + jump;
-// Pre-appended string for invalid moves and invalid selections
+// Checking for possible jumps
+const int FIRST_COL = 0;
+const int LAST_COL = 7;
+const int RIGHT_JUMP = 2;
+const int LEFT_JUMP = -2;
+// Pre-appended string for invalid moves and invalid selections and possible jumps
 const std::string isMsg = "Invalid selection: ";
 const std::string imMsg = "Invalid move: ";
-
+const std::string jumpMsg = "A jump must be taken with token at: ";
 
 namespace draughts
 {
@@ -46,19 +52,29 @@ namespace draughts
     class board {
       // 2D array storing cell contents of the board
       token gameBoard[WIDTH][HEIGHT];
+      // Total number of non-empty tokens on the board
+      int numTokens;
 
       public:
         // Constructor
         board(void);
         // Initialization and validation
+<<<<<<< HEAD
         void init_board(void);
+=======
+        void init_board();
+        bool validate_type(type, type);
+>>>>>>> 73a32c8f6c14102bda78730cae7a4256b2393991
         bool check_valid_selection(type, int, int);
         bool check_valid_move(int, int, int, int);
-        bool validate_type(type, type);
+        // Jumping validation
+        bool check_all_possible_jumps(void);
+        bool check_individual_jump(int, int);
+        bool check_jump_direction(int, int, int);
+        bool can_jump(int, int, int, int);
         // Score related functions
         int move_token(int, int, int, int);
         int promote_token(int, int);
-        bool check_possible_jump(void);
         // Getters/Settters
         char get_token(int, int);
         type get_type(int, int);

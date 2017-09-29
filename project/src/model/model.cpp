@@ -84,18 +84,6 @@ void draughts::model::model::start_game(int plr1, int plr2)
   currentPlayer = &xPlayer;
 }
 
-void draughts::model::model::swap_current_player(void){
-  if(currentPlayer == &xPlayer)
-    currentPlayer = &oPlayer;
-  else
-    currentPlayer = &xPlayer;
-}
-
-int draughts::model::model::get_winner(void)
-{
-  return EOF;
-}
-
 bool draughts::model::model::make_move(int startx, int starty, int endx, int endy)
 {
   // Same as get_token: since array starts from 0, we need to minus 1 from input
@@ -133,19 +121,36 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
     if (endx == X_START || endx == O_END)
       scoreUpdate += gameBoard.promote_token(endx, endy);
 
-    if (scoreUpdate > 1) {
+    if (scoreUpdate >= 1) {
       // Increase player's score by one since they removed a opponent's token
       currentPlayer->update_player_score(scoreUpdate);
       // Reduce number of tokens for other player by 1
       reduce_player_tokens(1);
       // TODO: check if any more moves can be made
-      //extraMove = gameBoard.check_extra_moves(endx, endy);
+      gameBoard.check_individual_jump(endx, endy);
     }
     // Switch player turn when done
-    //if (!extraMove)
-      //swap_current_player();
+    // if (!extraMove)
+    //   swap_current_player();
   }
   return validMove;
+}
+
+bool draughts::model::model::check_forced_jump(void) {
+  // Check if a player has to make a jump
+  return gameBoard.check_all_possible_jumps();
+}
+
+void draughts::model::model::swap_current_player(void){
+  if(currentPlayer == &xPlayer)
+    currentPlayer = &oPlayer;
+  else
+    currentPlayer = &xPlayer;
+}
+
+int draughts::model::model::get_winner(void)
+{
+  return EOF;
 }
 
 // #################### Player related functions ####################

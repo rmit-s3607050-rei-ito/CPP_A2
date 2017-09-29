@@ -11,8 +11,8 @@
 
 #include "board.h"
 
-// Constructor, calls initialization of board
-draughts::model::board::board(void)
+// Constructor, calls initialization of board, since 2 players, 2 * numTokens total
+draughts::model::board::board(void) : numTokens(NUM_TOKENS + NUM_TOKENS)
 {
   init_board();
 }
@@ -48,6 +48,23 @@ void draughts::model::board::init_board() {
 
   gameBoard[4][1] = nCircle;
   gameBoard[6][3] = nCircle;
+}
+
+bool draughts::model::board::validate_type(type t1, type t2) {
+  // Function checks whether types match in same category, x tokens or o tokens
+  // 1. Same parametersjumpType == startType
+  if(t1 == t2)
+    return true;
+
+  // 2. Cross tokens
+  else if((t1 == N_CROSS && t2 == K_CROSS) || (t1 == K_CROSS && t2 == N_CROSS))
+    return true;
+
+  // 3. Circle tokens
+  else if((t1 == N_CIRCLE && t2 == N_CIRCLE) || (t1 == K_CIRCLE && t2 == N_CIRCLE))
+    return true;
+
+  return false;
 }
 
 bool draughts::model::board::check_valid_selection(type playerType, int x, int y) {
@@ -145,19 +162,114 @@ bool draughts::model::board::check_valid_move(int startx, int starty, int endx, 
   return true;
 }
 
-bool draughts::model::board::validate_type(type t1, type t2) {
-  // Function checks whether types match in same category, x tokens or o tokens
-  // 1. Same parametersjumpType == startType
-  if(t1 == t2)
-    return true;
+// #################### Jumping validation ####################
+bool draughts::model::board::check_all_possible_jumps(void) {
+  int tokenCount = numTokens;   // Used to track number of tokens analyzed
+  bool possibleJump = false;
 
-  // 2. Cross tokens
-  else if((t1 == N_CROSS && t2 == K_CROSS) || (t1 == K_CROSS && t2 == N_CROSS))
-    return true;
+  // Loop through entire board to check whether a jump could be made
+  for(int row = 0; row < WIDTH; row++) {
+    for(int col = 0; col < HEIGHT; col++) {
+      // Only check possible jumps for non-empty cells
+      if(gameBoard[row][col].get_type() != EMPTY) {
+        tokenCount--;
+        if(check_individual_jump(row, col))
+          possibleJump = true;
+      }
+      // All player's tokens have been checked
+      if(tokenCount == 0) {
+        if (possibleJump)   // A jump has been found
+          return true;
+        else                // No jumps have been found
+          return false;
+      }
+    }
+  }
 
-  // 3. Circle tokens
-  else if((t1 == N_CIRCLE && t2 == N_CIRCLE) || (t1 == K_CIRCLE && t2 == N_CIRCLE))
+  return false;
+}
+
+bool draughts::model::board::check_individual_jump(int row, int col){
+  /* NOTE: Check if token at the specific location can jump again
+   * Tokens in column 1 can only move rightwards, in column 8 leftwards
+   * For the rest they can move left or right */
+
+  // 1. Token is present in column 1 (0 in array) = Check right for jump
+  if(col == FIRST_COL) {
+    if (check_jump_direction(row, col, RIGHT_JUMP))
+      return true;
+  }
+  // 2. Token is present in column 8 (7 in array) = Check left for jump
+  else if (col == LAST_COL) {
+    if (check_jump_direction(row, col, LEFT_JUMP))
+      return true;
+  }
+  // 3. Token is anywhere else = Check both left and right for jump
+  else {
+    if (check_jump_direction(row, col, RIGHT_JUMP))
+      return true;
+    else if (check_jump_direction(row, col, LEFT_JUMP))
+      return true;
+  }
+
+  return false;
+}
+
+bool draughts::model::board::check_jump_direction(int row, int col, int direction){
+  int forwardX, forwardY;       // Coordinates of landing spot after jump
+  int backX, backY;             // Also for landing spot, for king tokens only
+  type currentType = get_type(row, col);  // Type of current token to jump
+
+  // Direction doesn't vary between token types for column (y-axis) movement
+  forwardY = col + direction;
+  backY = forwardY;
+
+  // Moving by row will vary whether going up or down
+  // 1. 'x' type tokens, forward = down + direction, backwards = reverse
+  if(currentType == N_CROSS || currentType == K_CROSS) {
+    forwardX = row + downJump;
+    backX = row + upJump;
+  } // 2. 'o' type tokens, forward = up + direction, backwards = reverse
+  else if (currentType == N_CIRCLE || currentType == K_CIRCLE) {
+    forwardX = row + upJump;
+    backX = row + downJump;
+  }
+
+  // When landing spot is empty check if able to jump for all piece types
+  if (gameBoard[forwardX][forwardY].get_type() == EMPTY) {
+    if (can_jump(row, col, forwardX, forwardY))
+      return true;
+  }
+  // For the king pieces also need to check a backwards jump
+  if (currentType == K_CIRCLE || currentType == K_CROSS) {
+    if(gameBoard[backX][backY].get_type() == EMPTY) {
+      if (can_jump(row, col, backX, backY))
+        return true;
+    }
+  }
+
+  return false;
+}
+
+bool draughts::model::board::can_jump(int row, int col, int endX, int endY) {
+  std::pair<int,int> coords;  // Coordinates of cell being jumped over
+  type currentType;           // Type of current token to check
+  type typeJumpedOver;        // Type of token in cell being jumped over
+
+  // Get type of token to jump and of token that is going to be jumped over
+  coords = get_token_jumped_over(row, col, endX, endY);
+  currentType = get_type(row, col);
+  typeJumpedOver = get_type(coords.first, coords.second);
+
+  // Is its type the same as current token? if so there is a possible jump
+  if (!validate_type(currentType, typeJumpedOver)) {
+    // Print message saying that there's a possible jump
+    std::cout << jumpMsg << coords.first << "," << coords.second <<
+      " landing at cell: " << endX + ARRAY_DIFF << "," << endY + ARRAY_DIFF <<
+    std::endl;
+    gameBoard[endX][endY].add_possible_jump(endX, endY);
     return true;
+  }
 
   return false;
 }
@@ -202,15 +314,6 @@ int draughts::model::board::promote_token(int x, int y) {
   return 0;
 }
 
-bool draughts::model::board::check_possible_jump(void) {
-  /* Tokens in column 1 can only move rightwards, in column 8 leftwards
-   * For the rest they can move left or right */
-
-  // Column 1
-  //if (y == 0)
-  return false;
-}
-
 // #################### Getters and Setters ####################
 char draughts::model::board::get_token(int x, int y) {
   return gameBoard[x][y].print_token();
@@ -221,9 +324,8 @@ type draughts::model::board::get_type(int x, int y) {
 }
 
 std::pair<int,int> draughts::model::board::get_token_jumped_over(
-                   int startx, int starty, int endx, int endy)
-{
-  // Coordinates of cell being jumped over, jump factor added later
+                   int startx, int starty, int endx, int endy) {
+  // Calculate coordinates of cell being jumped over, jump factor added later
   std::pair<int, int> coords;
   int jumpX = startx;
   int jumpY = starty;
