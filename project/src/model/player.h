@@ -14,8 +14,8 @@
 #include <list>
 // Access to tokens as each player has their own set
 #include "token.h"
-
-const int NUM_STARTING_TOKENS = 12;
+// How many tokens a player beings with, when 0 player loses the game
+const int NUM_TOKENS = 12;
 
 #pragma once
 
@@ -32,7 +32,7 @@ namespace draughts
 
       public:
         // Constructor
-        player(void);
+        player(type);
         // Getters/Settters
         int get_id(void);
         int get_score(void);
@@ -42,9 +42,6 @@ namespace draughts
         void set_type(type);
         void reduce_num_tokens(int);
         void update_player_score(int);
-        // TODO x2
-        // void promote_token(void);
-        // void remove_token(void);
     };
   }
 }

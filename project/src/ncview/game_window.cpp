@@ -44,11 +44,12 @@ void draughts::ncview::game_window::activate(void)
         std::pair<std::pair<int,int>,std::pair<int,int>> move_coords;
         move_coords = get_move_input();
         validMove = themodel->make_move(
-                            move_coords.first.first,  move_coords.first.second,
+                            move_coords.first.first, move_coords.first.second,
                             move_coords.second.first, move_coords.second.second);
       }
+      // Reset valid move for next player
+      // themodel->swap_current_player();
       validMove = false;
-      themodel->swap_current_player();
     }
     catch(std::exception& ex)
     {
@@ -153,7 +154,8 @@ void draughts::ncview::game_window::display_board(void)
 bool draughts::ncview::game_window::validate_move_input(const std::string &input){
   bool validMove = false;
   std::regex moveCheck(MOVE_REGEX);
-  std::string invalidMove = "Invalid Move, Numbers for x and y must be between 1-8";
+  std::string invalidMove =
+    "Invalid Move: Numbers for x and y must be between 1-8 and be separated by ','";
 
   if (std::regex_match(input, moveCheck))
     validMove = true;

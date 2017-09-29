@@ -26,6 +26,13 @@ void draughts::model::token::set_type(type t){
   tokenType = t;
 }
 
+void draughts::model::token::promote_token(type t) {
+  if(t == N_CROSS)
+    set_type(K_CROSS);
+  else if (t == N_CIRCLE)
+    set_type(K_CIRCLE);
+}
+
 // #################### Other functions ####################
 char draughts::model::token::print_token(void) {
   char token = EMPTY_TOKEN;

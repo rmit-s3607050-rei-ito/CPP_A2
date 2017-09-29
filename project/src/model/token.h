@@ -35,6 +35,7 @@ namespace draughts
         // Getters/Settters
         type get_type(void);
         void set_type(type);
+        void promote_token(type);
         // Return specific character for token
         char print_token(void);
     };
