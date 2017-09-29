@@ -36,7 +36,6 @@ namespace draughts
     class model
     {
       // Game parameters
-<<<<<<< HEAD
       private:
         player *currentPlayer;  // Pointer to which player is taking their turn
         player xPlayer;         // player using 'x' tokens
@@ -48,21 +47,10 @@ namespace draughts
         std::map<int, std::string> playerList;
         // Number of players registered to the system. Allocates ID based on count
         int playerCount;
-=======
-      player *currentPlayer;  // Pointer to which player is taking their turn
-      player xPlayer;         // player using 'x' tokens
-      player oPlayer;         // player using 'o' tokens
-      // Array representing the game board and the tokens placed upon it
-      board gameBoard;
-      // Map of players, datastructure map is used due to get_player_list() type
-      std::map<int, std::string> playerList;
-      // Number of players registered to the system. Allocates ID based on count
-      int playerCount;
->>>>>>> 73a32c8f6c14102bda78730cae7a4256b2393991
 
-      static std::unique_ptr<model> instance;
-      model(void);                            // Constructor
-      bool player_exists(const std::string&);
+        static std::unique_ptr<model> instance;
+        model(void);                            // Constructor
+        bool player_exists(const std::string&);
 
       public:
         // Model instance related functions
