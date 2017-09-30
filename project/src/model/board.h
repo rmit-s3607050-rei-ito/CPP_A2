@@ -38,8 +38,8 @@ const int O_END = 7;
 const int JUMP = 1;
 const int UP = (int)draughts::direction::UP;
 const int DOWN = (int)draughts::direction::DOWN;
-const int RIGHT = 1;
 const int LEFT = -1;
+const int RIGHT = 1;
 const int UP_JUMP = UP - JUMP;
 const int DOWN_JUMP = DOWN + JUMP;
 // Checking for possible jumps
