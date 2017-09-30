@@ -27,6 +27,10 @@
 #include "token.h"
 #include "board.h"
 
+// Game over and back to main menu message
+const std::string GAME_OVER_TEXT = "========== GAME OVER ==========";
+const std::string TO_MAIN_MENU_TEXT = "Returning to the main menu...";
+
 #pragma once
 
 namespace draughts
@@ -66,6 +70,7 @@ namespace draughts
         bool game_draw(void);
         bool game_ended(void);
         void get_winner(void);
+        void get_draw_message(void);
 
         // Player related functions
         int get_player_count(void);

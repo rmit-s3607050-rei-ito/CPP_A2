@@ -44,25 +44,6 @@ void draughts::model::board::init_board() {
       }
     }
   }
-
-  // gameBoard[1][0] = nCross;
-  //
-  // gameBoard[2][3] = nCross;
-  // gameBoard[2][5] = nCross;
-  // gameBoard[2][7] = nCross;
-  // gameBoard[3][0] = nCross;
-  // gameBoard[3][2] = nCross;
-  // gameBoard[3][4] = nCross;
-  // gameBoard[3][6] = nCross;
-  //
-  // gameBoard[4][1] = nCircle;
-  // gameBoard[4][3] = nCircle;
-  // gameBoard[4][5] = nCircle;
-  // gameBoard[4][7] = nCircle;
-  // gameBoard[5][0] = nCircle;
-  // gameBoard[5][2] = nCircle;
-  // gameBoard[5][4] = nCircle;
-  // gameBoard[5][6] = nCircle;
 }
 
 bool draughts::model::board::check_valid_selection(type playerType, int x, int y) {
@@ -101,11 +82,11 @@ bool draughts::model::board::check_valid_move(int startx, int starty, int endx, 
   }
 
   // 3. Player tried to move incorrectly with normal tokens
-  if(startType == N_CROSS && rowMove == up) {
+  if(startType == N_CROSS && rowMove == UP) {
     std::cout << imMsg << "You cannot move up with a 'x' token" << std::endl;
     return false;
   }
-  else if(startType == N_CIRCLE && rowMove == down) {
+  else if(startType == N_CIRCLE && rowMove == DOWN) {
     std::cout << imMsg << "You cannot move down with a 'o' token" << std::endl;
     return false;
   }
@@ -118,13 +99,13 @@ bool draughts::model::board::check_valid_move(int startx, int starty, int endx, 
   }
 
   // 4. Player entered a move with a difference > 2
-  if (colMove > downJump || colMove < upJump){
+  if (colMove > DOWN_JUMP || colMove < UP_JUMP){
     std::cout << imMsg << "You cannot move more than 2 spaces" << std::endl;
     return false;
   }
 
   // 5. Player moved 2 spaces
-  if (colMove == downJump || colMove == upJump) {
+  if (colMove == DOWN_JUMP || colMove == UP_JUMP) {
     // Get type of cell 1 position before jump (based on moving rowMove/colMove)
     jumpCoords = get_token_jumped_over(startx, starty, endx, endy);
     jumpType = get_type(jumpCoords.first, jumpCoords.second);
@@ -190,23 +171,22 @@ bool draughts::model::board::check_all_possible_moves(int numXToken, int numYTok
       currentType = gameBoard[row][col].get_type();
       // Only check possible moves for non-empty cells
       if(currentType != EMPTY) {
-        std::cout << "Checking token at: " << row << "," << col << std::endl;
         totalTokens--;
         // Tokens in Column 0 and 1 can only move right
         if(col == FIRST_COL || col == SECOND_COL) {
-          if(check_move_direction(row, col, right))
+          if(check_move_direction(row, col, RIGHT))
             return true;
         }
         // Tokens in Column 8 and 7 can only move left
-        else if(col == LAST_COL || col == SECOND_LAST_COL) {
-          if(check_move_direction(row, col, left))
+        else if(col == SECOND_LAST_COL || col == LAST_COL) {
+          if(check_move_direction(row, col, LEFT))
             return true;
         }
         // Check both directions for the rest of the tokens
         else {
-          if(check_move_direction(row, col, left))
+          if(check_move_direction(row, col, LEFT))
             return true;
-          if(check_move_direction(row, col, right))
+          if(check_move_direction(row, col, RIGHT))
             return true;
         }
       }
@@ -222,7 +202,7 @@ bool draughts::model::board::check_all_possible_moves(int numXToken, int numYTok
 bool draughts::model::board::check_move_direction(int row, int col, int direction) {
   int forwardX, forwardY;       // Coordinates of landing spot after jump
   int backX, backY;             // Also for landing spot, for king tokens only
-  type currentType = get_type(row, col);  // Type of current token to jump
+  type currentType = get_type(row, col);  // Type of current token to move
 
   // Direction doesn't vary between token types for column (y-axis) movement
   forwardY = col + direction;
@@ -231,12 +211,12 @@ bool draughts::model::board::check_move_direction(int row, int col, int directio
   // Moving by row will vary whether going up or down
   // 1. 'x' type tokens, forward = down + direction, backwards = reverse
   if(currentType == N_CROSS || currentType == K_CROSS) {
-    forwardX = row + down;
-    backX = row + up;
+    forwardX = row + DOWN;
+    backX = row + UP;
   } // 2. 'o' type tokens, forward = up + direction, backwards = reverse
   else if (currentType == N_CIRCLE || currentType == K_CIRCLE) {
-    forwardX = row + up;
-    backX = row + down;
+    forwardX = row + UP;
+    backX = row + DOWN;
   }
 
   // When direction in move is empty, there is a possible move
@@ -318,12 +298,12 @@ bool draughts::model::board::check_jump_direction(int row, int col, int directio
   // Moving by row will vary whether going up or down
   // 1. 'x' type tokens, forward = down + direction, backwards = reverse
   if(currentType == N_CROSS || currentType == K_CROSS) {
-    forwardX = row + downJump;
-    backX = row + upJump;
+    forwardX = row + DOWN_JUMP;
+    backX = row + UP_JUMP;
   } // 2. 'o' type tokens, forward = up + direction, backwards = reverse
   else if (currentType == N_CIRCLE || currentType == K_CIRCLE) {
-    forwardX = row + upJump;
-    backX = row + downJump;
+    forwardX = row + UP_JUMP;
+    backX = row + DOWN_JUMP;
   }
 
   // When landing spot is empty check if able to jump for all piece types
@@ -389,7 +369,7 @@ int draughts::model::board::move_token(int startx, int starty, int endx, int end
 
   /* Check if player moved two spaces, Since bad cases have been caught,
    * this is when a enemy piece is to be removed */
-  if (colMove == downJump || colMove == upJump) {
+  if (colMove == DOWN_JUMP || colMove == UP_JUMP) {
     // Get coordinates of token that is jumped over
     coords = get_token_jumped_over(startx, starty, endx, endy);
     // Set it to empty
@@ -448,14 +428,14 @@ coordinates draughts::model::board::get_token_jumped_over(int startx, int starty
   * rowMove = +ive and colMove = +ive: jumpX and jumpY + jump */
 
  if(rowMove < 0)
-   jumpX -= jump;
+   jumpX -= JUMP;
  else
-   jumpX += jump;
+   jumpX += JUMP;
 
  if(colMove < 0)
-   jumpY -= jump;
+   jumpY -= JUMP;
  else
-   jumpY += jump;
+   jumpY += JUMP;
 
   coords = std::make_pair(jumpX, jumpY);
   return coords;

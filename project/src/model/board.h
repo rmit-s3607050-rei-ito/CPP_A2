@@ -35,13 +35,13 @@ const int X_END = 2;
 const int O_START = 5;
 const int O_END = 7;
 // Calculating movement on the board
-const int jump = 1;
-const int up = (int)draughts::direction::UP;
-const int down = (int)draughts::direction::DOWN;
-const int upJump = up - jump;
-const int downJump = down + jump;
-const int right = up;
-const int left = down;
+const int JUMP = 1;
+const int UP = (int)draughts::direction::UP;
+const int DOWN = (int)draughts::direction::DOWN;
+const int RIGHT = 1;
+const int LEFT = -1;
+const int UP_JUMP = UP - JUMP;
+const int DOWN_JUMP = DOWN + JUMP;
 // Checking for possible jumps
 const int FIRST_COL = 0;
 const int SECOND_COL = 1;

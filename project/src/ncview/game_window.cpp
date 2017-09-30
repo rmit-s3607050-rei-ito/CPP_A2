@@ -99,7 +99,7 @@ void draughts::ncview::game_window::activate(void)
   if(!isDraw)
     themodel->get_winner();
   else
-    std::cout << "A DRAW" << std::endl;
+    themodel->get_draw_message();
 }
 
 void draughts::ncview::game_window::display_board(void)

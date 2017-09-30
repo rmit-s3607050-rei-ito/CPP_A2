@@ -200,10 +200,17 @@ void draughts::model::model::get_winner(void)
   wScore = get_player_score(wID);
 
   // Prints out message of the winner of the game
-  std::cout << std::endl << "========== GAME OVER ==========" << std::endl;
+  std::cout << std::endl << GAME_OVER_TEXT << std::endl;
   std::cout << "The winner of this game is: " << std::endl;
   std::cout << "[" << wName << "] with a score of: " << wScore << std::endl;
-  std::cout << "Returning to the main menu..." << std::endl << std::endl;
+  std::cout << TO_MAIN_MENU_TEXT << std::endl << std::endl;
+}
+
+void draughts::model::model::get_draw_message(void) {
+  std::cout << std::endl << GAME_OVER_TEXT << std::endl;
+  std::cout << "There are no more possible moves left on the board" << std::endl;
+  std::cout << "The game ended in a draw!" << std::endl;
+  std::cout << TO_MAIN_MENU_TEXT << std::endl << std::endl;
 }
 
 // #################### Player related functions ####################
