@@ -44,6 +44,25 @@ void draughts::model::board::init_board() {
       }
     }
   }
+
+  // gameBoard[1][0] = nCross;
+  //
+  // gameBoard[2][3] = nCross;
+  // gameBoard[2][5] = nCross;
+  // gameBoard[2][7] = nCross;
+  // gameBoard[3][0] = nCross;
+  // gameBoard[3][2] = nCross;
+  // gameBoard[3][4] = nCross;
+  // gameBoard[3][6] = nCross;
+  //
+  // gameBoard[4][1] = nCircle;
+  // gameBoard[4][3] = nCircle;
+  // gameBoard[4][5] = nCircle;
+  // gameBoard[4][7] = nCircle;
+  // gameBoard[5][0] = nCircle;
+  // gameBoard[5][2] = nCircle;
+  // gameBoard[5][4] = nCircle;
+  // gameBoard[5][6] = nCircle;
 }
 
 bool draughts::model::board::check_valid_selection(type playerType, int x, int y) {
@@ -171,6 +190,7 @@ bool draughts::model::board::check_all_possible_moves(int numXToken, int numYTok
       currentType = gameBoard[row][col].get_type();
       // Only check possible moves for non-empty cells
       if(currentType != EMPTY) {
+        std::cout << "Checking token at: " << row << "," << col << std::endl;
         totalTokens--;
         // Tokens in Column 0 and 1 can only move right
         if(col == FIRST_COL || col == SECOND_COL) {

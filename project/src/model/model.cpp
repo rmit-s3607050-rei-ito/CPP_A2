@@ -159,13 +159,20 @@ bool draughts::model::model::check_forced_jump(void) {
 }
 
 bool draughts::model::model::game_draw(void) {
+  bool possibleMove;
   // Check both players, their token count
   int xPlayerTokens, oPlayerTokens;
   xPlayerTokens = xPlayer.get_num_tokens();
   oPlayerTokens = oPlayer.get_num_tokens();
 
-  // Check if any piece in the entire game can move, return result
-  return gameBoard.check_all_possible_moves(xPlayerTokens, oPlayerTokens);
+  // Check if any piece in the entire game can move
+  possibleMove = gameBoard.check_all_possible_moves(xPlayerTokens, oPlayerTokens);
+
+  // When there are still moves available it is not a draw
+  if(possibleMove)
+    return false;
+
+  return true;
 }
 
 bool draughts::model::model::game_ended(void) {
