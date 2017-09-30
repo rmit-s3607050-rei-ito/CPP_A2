@@ -67,10 +67,18 @@ draughts::model::model::~model(void)
 // #################### Game related functions ####################
 void draughts::model::model::start_game(int plr1, int plr2)
 {
-  // Create random seed
+  // All of these ensure replayability, refreshing game parameters every time
+  // 1. Create random seed
   srand(time(NULL));
 
-  // Randomly decide which player is assigned to 'x' and 'o' tokens
+  // 2. Initialize game board
+  gameBoard.init_board();
+
+  // 3. Initialize/Reset players, set starting token count and score to 0
+  xPlayer.initialize();
+  oPlayer.initialize();
+
+  // 5. Randomly decide which player is assigned to 'x' and 'o' tokens
   int startingPlayer = rand() % 2;
   if (startingPlayer == 0) {
     xPlayer.set_id(plr1);
@@ -84,6 +92,13 @@ void draughts::model::model::start_game(int plr1, int plr2)
   currentPlayer = &xPlayer;
 }
 
+void draughts::model::model::swap_current_player(void){
+  if(currentPlayer == &xPlayer)
+    currentPlayer = &oPlayer;
+  else
+    currentPlayer = &xPlayer;
+}
+
 bool draughts::model::model::make_move(int startx, int starty, int endx, int endy)
 {
   // Same as get_token: since array starts from 0, we need to minus 1 from input
@@ -92,13 +107,13 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
   endx -= ARRAY_DIFF;
   endy -= ARRAY_DIFF;
 
-  bool validSelection = false;        // (startx, starty) validation
-  bool validMove = false;             // (endx, endy) validation
-  int scoreUpdate = 0;
   type playerType = currentPlayer->get_type();
-
-  // NOTE: TEST EXTRA MOVE CHECK
-  bool extraMove = false;
+  // Validation for both start and end coordinates
+  bool validSelection = false;        // (startx, starty)
+  bool validMove = false;             // (endx, endy)
+  // Determine whether score is to be updated or token counts
+  bool capturedToken = false;
+  bool promotion = false;
 
   // 1. Catch when player selected same start and end positions
   if (startx == endx && starty == endy) {
@@ -115,43 +130,73 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
 
   // When all checks have been passed move the token and swap players
   if(validMove) {
-    // Check if move resulted in a token being removed from the game
-    scoreUpdate = gameBoard.move_token(startx, starty, endx, endy);
-
-    if (endx == X_START || endx == O_END)
-      scoreUpdate += gameBoard.promote_token(endx, endy);
-
-    if (scoreUpdate >= 1) {
-      // Increase player's score by one since they removed a opponent's token
-      currentPlayer->update_player_score(scoreUpdate);
-      // Reduce number of tokens for other player by 1
-      reduce_player_tokens(1);
-      // TODO: check if any more moves can be made
-      gameBoard.check_all_possible_jumps();
-      //gameBoard.check_individual_jump(endx, endy);
+    // Move the token
+    capturedToken = gameBoard.move_token(startx, starty, endx, endy);
+    // If move resulted in a token being removed from the game
+    if(capturedToken) {
+      // Add 1 to score and reduce number of tokens for other player by 1
+      currentPlayer->increment_score();
+      reduce_player_tokens();
     }
-    // Switch player turn when done
-    // if (!extraMove)
-    //   swap_current_player();
+    // If move resulted in token ending up at the opposite end of the board
+    if (endx == X_START || endx == O_END) {
+      // Try to promote the token
+      promotion = gameBoard.promote_token(endx, endy);
+      // Add 1 to score if the token has been successfully promoted
+      if (promotion)
+        currentPlayer->increment_score();
+    }
   }
   return validMove;
 }
 
 bool draughts::model::model::check_forced_jump(void) {
-  // Check if a player has to make a jump
-  return gameBoard.check_all_possible_jumps();
+  // Check if a player is forced to make a jump
+  type currentType = currentPlayer->get_type();
+  int numTokens = currentPlayer->get_num_tokens();
+
+  return gameBoard.check_all_possible_jumps(currentType, numTokens);
 }
 
-void draughts::model::model::swap_current_player(void){
-  if(currentPlayer == &xPlayer)
-    currentPlayer = &oPlayer;
-  else
-    currentPlayer = &xPlayer;
+bool draughts::model::model::game_draw(void) {
+  // Check both players, their token count
+  int xPlayerTokens, oPlayerTokens;
+  xPlayerTokens = xPlayer.get_num_tokens();
+  oPlayerTokens = oPlayer.get_num_tokens();
+
+  // Check if any piece in the entire game can move, return result
+  return gameBoard.check_all_possible_moves(xPlayerTokens, oPlayerTokens);
 }
 
-int draughts::model::model::get_winner(void)
+bool draughts::model::model::game_ended(void) {
+  int xPlayerTokens, oPlayerTokens;
+  xPlayerTokens = xPlayer.get_num_tokens();
+  oPlayerTokens = oPlayer.get_num_tokens();
+
+  // If either has 0, game has ended with a winner
+  if (xPlayerTokens == 0 || oPlayerTokens == 0)
+    return true;
+
+  return false;
+}
+
+void draughts::model::model::get_winner(void)
 {
-  return EOF;
+  int wID, wScore;
+  std::string wName;
+
+  // At the end, turn swapped to loser player, swap it back to winner
+  swap_current_player();
+
+  wID = currentPlayer->get_id();
+  wName = get_player_name(wID);
+  wScore = get_player_score(wID);
+
+  // Prints out message of the winner of the game
+  std::cout << std::endl << "========== GAME OVER ==========" << std::endl;
+  std::cout << "The winner of this game is: " << std::endl;
+  std::cout << "[" << wName << "] with a score of: " << wScore << std::endl;
+  std::cout << "Returning to the main menu..." << std::endl << std::endl;
 }
 
 // #################### Player related functions ####################
@@ -172,8 +217,7 @@ int draughts::model::model::get_player_score(int playernum)
 
 int draughts::model::model::get_current_player(void)
 {
-  // Return ID of current player
-  return currentPlayer->get_id();
+  return currentPlayer->get_id(); // Return ID of current player
 }
 
 std::string draughts::model::model::get_player_name(int id)
@@ -201,8 +245,7 @@ std::string draughts::model::model::get_player_name(int id)
   return playerName;
 }
 
-std::map<int, std::string> draughts::model::model::get_player_list(void)
-    const
+std::map<int, std::string> draughts::model::model::get_player_list(void) const
 {
   return playerList;
 }
@@ -237,11 +280,11 @@ char draughts::model::model::get_current_player_token() {
   return (currentPlayer->get_type() == N_CROSS) ? N_X_TOKEN : N_O_TOKEN;
 }
 
-void draughts::model::model::reduce_player_tokens(int tokenChange) {
+void draughts::model::model::reduce_player_tokens() {
   if(currentPlayer == &xPlayer)
-    oPlayer.reduce_num_tokens(tokenChange);
+    oPlayer.reduce_token_count();
   else
-    xPlayer.reduce_num_tokens(tokenChange);
+    xPlayer.reduce_token_count();
 }
 
 // #################### Board related functions ####################
@@ -262,4 +305,8 @@ char draughts::model::model::get_token(int x ,int y)
   int yPos = y - ARRAY_DIFF;
 
   return gameBoard.get_token(xPos, yPos);;
+}
+
+std::list<moves> draughts::model::model::get_forced_jumps(void) {
+  return gameBoard.get_forced_jumps();
 }

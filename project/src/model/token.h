@@ -14,7 +14,7 @@
 
 // Storing all possible jumps
 #include <list>
-// Jumps you can make for a single token
+// Jump possibilities you can make for a single token
 const int MAX_JUMPS = 4; // For king pieces max = 4 (forward/back) + (left/right)
 
 // What board elements appear as
@@ -36,8 +36,6 @@ namespace draughts
     class token
     {
       type tokenType;     // Whether piece is normal or king, also factor player
-      // Possible jumps a token can make, max 4 (for king piece)
-      std::list<std::pair<int,int>> possibleJumps;
 
       public:
         // Constructor
@@ -46,9 +44,6 @@ namespace draughts
         type get_type(void);
         void set_type(type);
         void promote_token(type);
-        // Jumping related calculations
-        void add_possible_jump(int, int);
-        void reset_possible_jumps(void);
         // Return specific character for token
         char print_token(void);
     };

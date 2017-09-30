@@ -23,24 +23,25 @@ namespace draughts
   {
     class player
     {
-      private:
-        int playerID;
-        int playerScore;
-        int numTokens;
-        type playerType;
+      int playerID;
+      int playerScore;
+      int numTokens;
+      type playerType;
 
       public:
-        // Constructor
+        // Constructor and initialization
         player(type);
+        void initialize(void);
         // Getters/Settters
         int get_id(void);
+        int get_num_tokens(void);
         int get_score(void);
         type get_type(void);
         void set_id(int);
-        void set_score(int);
         void set_type(type);
-        void reduce_num_tokens(int);
-        void update_player_score(int);
+        // Changing token count and score by -1 and + 1 respectively
+        void reduce_token_count(void);
+        void increment_score(void);
     };
   }
 }

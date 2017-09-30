@@ -11,14 +11,17 @@
  */
 
 #include "window.h"
+#include "../model/model.h"
 #include <map>
 #include <string>
 #include <utility>
 #include <boost/algorithm/string.hpp>
 
+// Enables std::find, searching through list
+#include <algorithm>
 // Regular expression for input validation
 #include <regex>
-const std::string MOVE_REGEX = "[1-8],[1-8]-[1-8],[1-8]";
+const std::string REGULAR_MOVE_REGEX = "[1-8],[1-8]-[1-8],[1-8]";
 
 namespace draughts
 {
@@ -31,13 +34,18 @@ namespace draughts
       player_pair players;
       bool quit;
 
+      // Printing
       void print_top_row(void);
       void print_line(int);
       void print_row(int);
-      std::pair<std::pair<int,int>, std::pair<int,int>> get_move_input(void);
-      std::pair<int,int> strtocoord(const std::string&);
+      void print_possible_jumps(std::list<moves>);
 
-      // Added function, input validation
+      // Retrieve input from user
+      moves get_move_input(void);
+      moves get_jump_input(std::list<moves>);
+      coordinates strtocoord(const std::string&);
+
+      // Input validation
       bool validate_move_input(const std::string &);
 
       public:

@@ -12,16 +12,24 @@
 
 #include "player.h"
 
-// Constructor, set initial score to 0, number of tokens in possession 12
-draughts::model::player::player(type t) : playerScore(0), numTokens(NUM_TOKENS)
+// Constructor
+draughts::model::player::player(type t) : playerType(t)
 {
-  playerType = t;
+}
+
+// Blank slate starting parameters for player
+void draughts::model::player::initialize(void){
+  playerScore = 0;
+  numTokens = NUM_TOKENS;
 }
 
 // #################### Getters and Setters ####################
-
 int draughts::model::player::get_id(void) {
   return playerID;
+}
+
+int draughts::model::player::get_num_tokens(void) {
+  return numTokens;
 }
 
 int draughts::model::player::get_score(void) {
@@ -36,18 +44,15 @@ void draughts::model::player::set_id(int pID) {
   playerID = pID;
 }
 
-void draughts::model::player::set_score(int score) {
-  playerScore = score;
-}
-
 void draughts::model::player::set_type(type ttype) {
   playerType = ttype;
 }
 
-void draughts::model::player::reduce_num_tokens(int tokenChange) {
-  numTokens -= tokenChange;
+// #################### Incremental change ####################
+void draughts::model::player::reduce_token_count(void) {
+  numTokens--;
 }
 
-void draughts::model::player::update_player_score(int scoreChange) {
-  playerScore += scoreChange;
+void draughts::model::player::increment_score(void) {
+  playerScore++;
 }

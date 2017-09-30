@@ -60,10 +60,12 @@ namespace draughts
 
         // Game related functions
         void start_game(int, int);
+        void swap_current_player(void);
         bool make_move(int, int, int, int);
         bool check_forced_jump(void);
-        void swap_current_player(void);
-        int get_winner(void);
+        bool game_draw(void);
+        bool game_ended(void);
+        void get_winner(void);
 
         // Player related functions
         int get_player_count(void);
@@ -73,12 +75,13 @@ namespace draughts
         std::map<int, std::string> get_player_list(void) const;
         bool add_player(const std::string &);
         char get_current_player_token(void);
-        void reduce_player_tokens(int);
+        void reduce_player_tokens(void);
 
         // Board related functions
         int get_width(void);
         int get_height(void);
         char get_token(int,int);
+        std::list<moves> get_forced_jumps(void);
     };
   }
 }

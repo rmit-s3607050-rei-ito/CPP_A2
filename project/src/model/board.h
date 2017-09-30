@@ -17,6 +17,11 @@
 #include <iostream>
 #include <list>
 
+// Set of coordinates, x and y
+typedef std::pair<int, int> coordinates;
+// Pair of start and end coordinates
+typedef std::pair<coordinates, coordinates> moves;
+
 // Accounting for array difference (since they start from 0)
 const int ARRAY_DIFF = 1;
 // Height/width default to 8 (64 cells)
@@ -35,15 +40,19 @@ const int up = (int)draughts::direction::UP;
 const int down = (int)draughts::direction::DOWN;
 const int upJump = up - jump;
 const int downJump = down + jump;
+const int right = up;
+const int left = down;
 // Checking for possible jumps
 const int FIRST_COL = 0;
+const int SECOND_COL = 1;
+const int SECOND_LAST_COL = 6;
 const int LAST_COL = 7;
 const int RIGHT_JUMP = 2;
 const int LEFT_JUMP = -2;
 // Pre-appended string for invalid moves and invalid selections and possible jumps
 const std::string isMsg = "Invalid selection: ";
 const std::string imMsg = "Invalid move: ";
-const std::string jumpMsg = "A jump must be taken with token at: ";
+const std::string jumpMsg = "Token at: ";
 
 namespace draughts
 {
@@ -52,29 +61,34 @@ namespace draughts
     class board {
       // 2D array storing cell contents of the board
       token gameBoard[WIDTH][HEIGHT];
-      // Total number of non-empty tokens on the board
-      int numTokens;
+      /* All coords of tokens that are able to jump, reset when rechecking jumps
+       * Essentially a list of pairs of coordinates: the token and where it lands */
+      std::list<moves> forcedJumps;
 
       public:
         // Constructor
         board(void);
         // Initialization and validation
         void init_board();
-        bool validate_type(type, type);
         bool check_valid_selection(type, int, int);
         bool check_valid_move(int, int, int, int);
+        bool is_same_type(type, type);
+        // Move validation
+        bool check_all_possible_moves(int, int);
+        bool check_move_direction(int, int, int);
         // Jumping validation
-        bool check_all_possible_jumps(void);
+        bool check_all_possible_jumps(type, int);
         bool check_individual_jump(int, int);
         bool check_jump_direction(int, int, int);
         bool can_jump(int, int, int, int);
         // Score related functions
         int move_token(int, int, int, int);
-        int promote_token(int, int);
+        bool promote_token(int, int);
         // Getters/Settters
         char get_token(int, int);
         type get_type(int, int);
-        std::pair<int,int> get_token_jumped_over(int, int, int, int);
+        coordinates get_token_jumped_over(int, int, int, int);
+        std::list<moves> get_forced_jumps(void);
         int get_width(void);
         int get_height(void);
     };
