@@ -1,3 +1,4 @@
+
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -9,18 +10,20 @@
  * -----------------------------------------------------------------------------
  */
 
+#include "menu.h"
+
 #pragma once
 
 namespace draughts
 {
-  namespace model
+  namespace ncview
   {
-    class king : public piece
+    class main_menu : public menu
     {
+      static const std::vector<std::string> strings;
       public:
-        king(void);
-        type get_type(void);
-        bool check_move(int,int);
+        main_menu(void);
+        virtual ~main_menu(void);
     };
   }
 }

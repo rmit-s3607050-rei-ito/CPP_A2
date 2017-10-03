@@ -9,18 +9,31 @@
  * -----------------------------------------------------------------------------
  */
 
-#pragma once
+#include "normal.h"
 
-namespace draughts
+// Constructor, allocates type
+draughts::model::piece::normal(void)
 {
-  namespace model
-  {
-    class normal : public piece
-    {
-      public:
-        normal(void);
-        type get_type(void);
-        bool check_move(int,int);
-    };
-  }
+}
+
+type get_type(void)
+{
+  return NORMAL;
+}
+
+bool check_move(int diffx, int diffy)
+{
+  return false;
+}
+
+team draughts::model::piece::get_team(void)
+{
+  return pieceTeam;
+}
+
+char draughts::model::piece::get_icon(void) {
+  if(team == RED)
+    return RED_N_PIECE;
+  else
+    return WHITE_N_PIECE;
 }

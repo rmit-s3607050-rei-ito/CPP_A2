@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -12,32 +11,20 @@
 
 #pragma once
 
-// What board elements appear as
-const char N_O_TOKEN = 'o';
-const char K_O_TOKEN = 'O';
-const char N_X_TOKEN = 'x';
-const char K_X_TOKEN = 'X';
-const char EMPTY_TOKEN = ' ';
-
-enum type { N_CIRCLE, K_CIRCLE, N_CROSS, K_CROSS, EMPTY };
+const char RED_N_PIECE = 'x';
+const char WHITE_N_PIECE = 'o';
 
 namespace draughts
 {
   namespace model
   {
-    class token
+    class normal : public piece
     {
-      type tokenType;     // Whether piece is normal or king, also factor player
-
       public:
-        // Constructor
-        token(void);
-        // Getters/Settters
+        normal(void);
         type get_type(void);
-        void set_type(type);
-        void promote_token(type);
-        // Return specific character for token
-        char print_token(void);
+        bool check_move(int,int);
+        char get_icon(void);
     };
   }
 }

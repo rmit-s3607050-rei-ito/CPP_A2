@@ -9,24 +9,23 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "king.h"
+#pragma once
 
-// Constructor, allocates type
-draughts::model::piece::king(void)
-{
-}
+// #include "piece.h"
 
-type get_type(void)
-{
-  return KING;
-}
+const char EMPTY_PIECE = ' ';
 
-bool check_move(int diffx, int diffy)
+namespace draughts
 {
-  return false;
-}
-
-team draughts::model::piece::get_team(void)
-{
-  return pieceTeam;
+  namespace model
+  {
+    class empty : public piece
+    {
+      public:
+        empty(void);
+        type get_type(void);
+        bool check_move(int,int);
+        char get_icon(void);
+    };
+  }
 }

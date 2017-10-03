@@ -12,7 +12,7 @@
 #include "empty.h"
 
 // Constructor, allocates type
-draughts::model::piece::empty(void)
+draughts::model::piece::empty(void) : pieceTeam(NO_TEAM)
 {
 }
 
@@ -29,4 +29,8 @@ bool check_move(int diffx, int diffy)
 team draughts::model::piece::get_team(void)
 {
   return pieceTeam;
+}
+
+char draughts::model::piece::get_icon(void) {
+  return EMPTY_PIECE;
 }

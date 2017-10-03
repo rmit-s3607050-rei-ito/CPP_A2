@@ -12,15 +12,10 @@
 
 #pragma once
 
-// #include "token.h"
+#include "token.h"
 #include "direction.h"
 #include <iostream>
 #include <list>
-
-#include "piece.h"
-#include "empty.h"
-#include "normal.h"
-#include "king.h"
 
 // Set of coordinates, x and y
 typedef std::pair<int, int> coordinates;
@@ -32,7 +27,6 @@ const int ARRAY_DIFF = 1;
 // Height/width default to 8 (64 cells)
 const int WIDTH = 8;
 const int HEIGHT = 8;
-const int NUM_CELLS = 64;
 // Values for initializing board
 // 'x' tokens from 0 to 2 (display/input = 1 to 3)
 const int X_START = 0;
@@ -65,37 +59,36 @@ namespace draughts
   namespace model
   {
     class board {
-    // 2D array storing cell contents of the board
-      //token gameBoard[WIDTH][HEIGHT];
-      piece* gameBoard[NUM_CELLS];
-    /* All coords of tokens that are able to jump, reset when rechecking jumps
-     * Essentially a list of pairs of coordinates: the token and where it lands */
+      // 2D array storing cell contents of the board
+      token gameBoard[WIDTH][HEIGHT];
+      /* All coords of tokens that are able to jump, reset when rechecking jumps
+       * Essentially a list of pairs of coordinates: the token and where it lands */
       std::list<moves> forcedJumps;
 
       public:
-      // Constructor
+        // Constructor
         board(void);
-      // Initialization and validation
+        // Initialization and validation
         void init_board();
-        //bool check_valid_selection(type, int, int);
-        //bool check_valid_move(int, int, int, int);
-        //bool is_same_type(type, type);
-      // Move validation
-        // bool check_all_possible_moves(int, int);
-        // bool check_move_direction(int, int, int);
-      // Jumping validation
-        // bool check_all_possible_jumps(type, int);
-        // bool check_individual_jump(int, int);
-        // bool check_jump_direction(int, int, int);
-        // bool can_jump(int, int, int, int);
-      // Score related functions
-        // int move_token(int, int, int, int);
-        // bool promote_token(int, int);
-      // Getters/Settters
+        bool check_valid_selection(type, int, int);
+        bool check_valid_move(int, int, int, int);
+        bool is_same_type(type, type);
+        // Move validation
+        bool check_all_possible_moves(int, int);
+        bool check_move_direction(int, int, int);
+        // Jumping validation
+        bool check_all_possible_jumps(type, int);
+        bool check_individual_jump(int, int);
+        bool check_jump_direction(int, int, int);
+        bool can_jump(int, int, int, int);
+        // Score related functions
+        int move_token(int, int, int, int);
+        bool promote_token(int, int);
+        // Getters/Settters
         char get_token(int, int);
         type get_type(int, int);
-        // coordinates get_token_jumped_over(int, int, int, int);
-        // std::list<moves> get_forced_jumps(void);
+        coordinates get_token_jumped_over(int, int, int, int);
+        std::list<moves> get_forced_jumps(void);
         int get_width(void);
         int get_height(void);
     };

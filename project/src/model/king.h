@@ -9,15 +9,22 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "piece.h"
+#pragma once
 
-// Constructor, allocates type
-draughts::model::piece::piece(void)
-{
-}
+const char RED_K_PIECE = 'x';
+const char WHITE_K_PIECE = 'o';
 
-// #################### Getters and Setters ####################
-team draughts::model::piece::get_team(void)
+namespace draughts
 {
-  return pieceTeam;
+  namespace model
+  {
+    class king : public piece
+    {
+      public:
+        king(void);
+        type get_type(void);
+        bool check_move(int,int);
+        char get_icon(void);
+    };
+  }
 }

@@ -9,23 +9,14 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "normal.h"
+#include "piece.h"
 
 // Constructor, allocates type
-draughts::model::piece::normal(void)
+draughts::model::piece::piece(coordinates coords) : position(coords)
 {
 }
 
-type get_type(void)
-{
-  return NORMAL;
-}
-
-bool check_move(int diffx, int diffy)
-{
-  return false;
-}
-
+// #################### Getters and Setters ####################
 team draughts::model::piece::get_team(void)
 {
   return pieceTeam;

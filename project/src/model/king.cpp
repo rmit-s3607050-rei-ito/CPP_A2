@@ -9,18 +9,31 @@
  * -----------------------------------------------------------------------------
  */
 
-#pragma once
+#include "king.h"
 
-namespace draughts
+// Constructor, allocates type
+draughts::model::piece::king(void)
 {
-  namespace model
-  {
-    class empty : public piece
-    {
-      public:
-        empty(void);
-        type get_type(void);
-        bool check_move(int,int);
-    };
-  }
+}
+
+type get_type(void)
+{
+  return KING;
+}
+
+bool check_move(int diffx, int diffy)
+{
+  return false;
+}
+
+team draughts::model::piece::get_team(void)
+{
+  return pieceTeam;
+}
+
+char draughts::model::piece::get_icon(void) {
+  if(team == RED)
+    return RED_K_PIECE;
+  else
+    return WHITE_K_PIECE;
 }

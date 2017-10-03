@@ -12,12 +12,18 @@
 
 #pragma once
 
+// Storing all possible jumps
+#include <list>
+
 // What board elements appear as
 const char N_O_TOKEN = 'o';
 const char K_O_TOKEN = 'O';
 const char N_X_TOKEN = 'x';
 const char K_X_TOKEN = 'X';
 const char EMPTY_TOKEN = ' ';
+
+// How many tokens a player starts with, when 0 player loses the game
+const int NUM_TOKENS = 12;
 
 enum type { N_CIRCLE, K_CIRCLE, N_CROSS, K_CROSS, EMPTY };
 

@@ -11,15 +11,13 @@
 
 #pragma once
 
-// What board elements appear as
-// const char N_O_TOKEN = 'o';
-// const char K_O_TOKEN = 'O';
-// const char N_X_TOKEN = 'x';
-// const char K_X_TOKEN = 'X';
-// const char EMPTY_TOKEN = ' ';
+#include <list>
 
 enum team { RED, WHITE, NO_TEAM };
 enum type { NORMAL, KING, EMPTY };
+
+// Set of coordinates, x and y
+typedef std::pair<int, int> coordinates;
 
 namespace draughts
 {
@@ -29,9 +27,11 @@ namespace draughts
     {
       private:
         team pieceTeam;
+        char icon;
+        coordinates position;
 
       public:
-        piece(void);
+        piece(coordinates);
         // Getters/Settters
         virtual type get_type(void) = 0;
 
@@ -41,8 +41,9 @@ namespace draughts
 
         // void set_type(type);
         // void promote_token(type);
-        // // Return specific character for token
-        // char print_token(void);
+
+        // Return specific character for token
+        virtual char get_icon(void);
     };
   }
 }
