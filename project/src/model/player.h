@@ -15,7 +15,7 @@
 
 // Access to tokens as each player has their own set
 // #include "token.h"
-#include "./pieces/piece.h"
+#include "piece.h"
 
 // How many tokens a player starts with, when 0 player loses the game
 const int STARTING_TOKENS = 12;

@@ -21,8 +21,8 @@ draughts::ncview::game_window::game_window(const player_pair & theplayers)
 void draughts::ncview::game_window::activate(void)
 {
   bool validMove = false;       // Move is of format x,y-x,y
-  bool mustJump = false;        // Player must make their token jump
-  bool isDraw = false;          // Game didnt end in a draw
+  // bool mustJump = false;        // Player must make their token jump
+  // bool isDraw = false;          // Game didnt end in a draw
   //bool jumpMade = false;        // Jump made, check for extra jumps
   moves move;                   // move to make
 

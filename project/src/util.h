@@ -1,3 +1,4 @@
+
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -11,23 +12,9 @@
 
 #pragma once
 
-// Inheriting from piece
-#include "piece.h"
-// Piece char representation
-const char RED_K_PIECE = 'X';
-const char WHITE_K_PIECE = 'O';
+// Set of coordinates, x and y
+typedef std::pair<int, int> coordinates;
 
-namespace draughts
-{
-  namespace model
-  {
-    class king : public piece
-    {
-      public:
-        king(team);
-        type get_type(void);
-        //bool check_move(int,int);
-        char get_icon(void);
-    };
-  }
-}
+// Piece related constants
+enum team { RED, WHITE, NO_TEAM };
+enum type { NORMAL, KING, EMPTY };

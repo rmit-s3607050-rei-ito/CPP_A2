@@ -11,28 +11,23 @@
 
 #include "normal.h"
 
-// Constructor, allocates type
-draughts::model::piece::normal(void)
+// Constructor, calls parent using parameters
+draughts::model::normal::normal(team t) : piece(t)
 {
 }
 
-type get_type(void)
+type draughts::model::normal::get_type(void)
 {
   return NORMAL;
 }
 
-bool check_move(int diffx, int diffy)
-{
-  return false;
-}
+// bool check_move(int diffx, int diffy)
+// {
+//   return false;
+// }
 
-team draughts::model::piece::get_team(void)
-{
-  return pieceTeam;
-}
-
-char draughts::model::piece::get_icon(void) {
-  if(team == RED)
+char draughts::model::normal::get_icon(void) {
+  if(pieceTeam == RED)
     return RED_N_PIECE;
   else
     return WHITE_N_PIECE;

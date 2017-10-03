@@ -39,9 +39,8 @@ bool draughts::model::model::player_exists(const std::string &pname)
   return found;
 }
 
-// Constructor for model, assign default width/height, player types and none registered
-draughts::model::model::model(void) : red(RED), white(WHITE),
-                                      playerCount(0)
+// Constructor for model, player types and none registered
+draughts::model::model::model(void) : red(RED), white(WHITE), playerCount(0)
 {
 }
 
@@ -321,7 +320,7 @@ char draughts::model::model::get_token(int x ,int y)
   int xPos = x - ARRAY_DIFF;
   int yPos = y - ARRAY_DIFF;
 
-  return gameBoard.get_token(xPos, yPos);;
+  return gameBoard.get_token(xPos, yPos);
 }
 
 // std::list<moves> draughts::model::model::get_forced_jumps(void) {

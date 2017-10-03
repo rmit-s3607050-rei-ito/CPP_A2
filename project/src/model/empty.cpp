@@ -11,26 +11,21 @@
 
 #include "empty.h"
 
-// Constructor, allocates type
-draughts::model::piece::empty(void) : pieceTeam(NO_TEAM)
+// Constructor, calls parent using parameters
+draughts::model::empty::empty(team t) : piece(t) 
 {
 }
 
-type get_type(void)
+type draughts::model::empty::get_type(void)
 {
   return EMPTY;
 }
 
-bool check_move(int diffx, int diffy)
-{
-  return false;
-}
+// bool draughts::model::empty::check_move(int diffx, int diffy)
+// {
+//   return false;
+// }
 
-team draughts::model::piece::get_team(void)
-{
-  return pieceTeam;
-}
-
-char draughts::model::piece::get_icon(void) {
+char draughts::model::empty::get_icon(void) {
   return EMPTY_PIECE;
 }

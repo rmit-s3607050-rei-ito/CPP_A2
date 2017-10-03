@@ -11,13 +11,8 @@
 
 #pragma once
 
-#include <list>
-
-enum team { RED, WHITE, NO_TEAM };
-enum type { NORMAL, KING, EMPTY };
-
-// Set of coordinates, x and y
-typedef std::pair<int, int> coordinates;
+#include <iostream>
+#include "util.h"
 
 namespace draughts
 {
@@ -25,25 +20,18 @@ namespace draughts
   {
     class piece
     {
-      private:
+      protected:
         team pieceTeam;
-        char icon;
-        coordinates position;
+        //coordinates position;
 
       public:
-        piece(coordinates);
+        piece(team);
         // Getters/Settters
+        // 1. To be overidden
         virtual type get_type(void) = 0;
-
-        virtual bool check_move(int,int);
-
+        virtual char get_icon(void) = 0;  // Get specific character for a piece
+        // 2. Preset, cannot override
         team get_team(void);
-
-        // void set_type(type);
-        // void promote_token(type);
-
-        // Return specific character for token
-        virtual char get_icon(void);
     };
   }
 }

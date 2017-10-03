@@ -11,28 +11,23 @@
 
 #include "king.h"
 
-// Constructor, allocates type
-draughts::model::piece::king(void)
+// Constructor, calls parent using parameters
+draughts::model::king::king(team t) : piece(t)
 {
 }
 
-type get_type(void)
+type draughts::model::king::get_type(void)
 {
   return KING;
 }
 
-bool check_move(int diffx, int diffy)
-{
-  return false;
-}
+// bool check_move(int diffx, int diffy)
+// {
+//   return false;
+// }
 
-team draughts::model::piece::get_team(void)
-{
-  return pieceTeam;
-}
-
-char draughts::model::piece::get_icon(void) {
-  if(team == RED)
+char draughts::model::king::get_icon(void) {
+  if(pieceTeam == RED)
     return RED_K_PIECE;
   else
     return WHITE_K_PIECE;

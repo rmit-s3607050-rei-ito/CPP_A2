@@ -11,12 +11,17 @@
 
 #include "piece.h"
 
-// Constructor, allocates type
-draughts::model::piece::piece(coordinates coords) : position(coords)
+// Constructor, by default no team unless set
+draughts::model::piece::piece(team t) : pieceTeam(t)
 {
 }
 
 // #################### Getters and Setters ####################
+// void draughts::model::piece::set_team(team t)
+// {
+//   pieceTeam = t;
+// }
+
 team draughts::model::piece::get_team(void)
 {
   return pieceTeam;

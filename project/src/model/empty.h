@@ -11,8 +11,9 @@
 
 #pragma once
 
-// #include "piece.h"
-
+// Inheriting from piece
+#include "piece.h"
+// Piece char representation
 const char EMPTY_PIECE = ' ';
 
 namespace draughts
@@ -22,9 +23,9 @@ namespace draughts
     class empty : public piece
     {
       public:
-        empty(void);
+        empty(team);
         type get_type(void);
-        bool check_move(int,int);
+        //bool check_move(int,int);
         char get_icon(void);
     };
   }

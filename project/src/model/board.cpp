@@ -18,30 +18,27 @@ draughts::model::board::board(void)
 
 // #################### Initialization and validation ####################
 void draughts::model::board::init_board() {
-  normal startRed, startWhite;
-  empty blankCell;
-  // token empty, nCross, nCircle;
-  // empty.set_type(EMPTY);
-  // nCross.set_type(N_CROSS);
-  // nCircle.set_type(N_CIRCLE);
+  piece *redPiece = new normal(RED);
+  piece *whitePiece = new normal(WHITE);
+  piece *emptyCell = new empty(NO_TEAM);
 
   for(int row = 0; row < WIDTH; row++) {
     for (int col = 0; col < HEIGHT; col++) {
       // Fill gaps between tokens with empty spaces
       if(((col + row) % 2) == 0) {
-        //gameBoard[row][col] = empty;
+        gameBoard[row][col] = emptyCell;
       } else {
         // Initialize middle rows (3 and 4) as empty
         if (row > X_END && row < O_START) {
-          //gameBoard[row][col] = empty;
+          gameBoard[row][col] = emptyCell;
         }
         // Initialize 'x' tokens
         else if (row <= X_END) {
-          //gameBoard[row][col] = nCross;
+          gameBoard[row][col] = redPiece;
         }
         // Initialize 'o' tokens
         else {
-          //gameBoard[row][col] = nCircle;
+          gameBoard[row][col] = whitePiece;
         }
       }
     }
@@ -405,12 +402,11 @@ void draughts::model::board::init_board() {
 
 // #################### Getters and Setters ####################
 char draughts::model::board::get_token(int x, int y) {
-  return ' ';
-  // return gameBoard[x][y].print_token();
+  return gameBoard[x][y]->get_icon();
 }
 
 type draughts::model::board::get_type(int x, int y) {
-  return gameBoard[x][y].get_type();
+  return gameBoard[x][y]->get_type();
 }
 
 // coordinates draughts::model::board::get_token_jumped_over(int startx, int starty,

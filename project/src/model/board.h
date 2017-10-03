@@ -22,8 +22,6 @@
 #include "normal.h"
 #include "king.h"
 
-// Set of coordinates, x and y
-typedef std::pair<int, int> coordinates;
 // Pair of start and end coordinates
 typedef std::pair<coordinates, coordinates> moves;
 
@@ -67,7 +65,9 @@ namespace draughts
     class board {
     // 2D array storing cell contents of the board
       //token gameBoard[WIDTH][HEIGHT];
-      piece* gameBoard[NUM_CELLS];
+      // piece* gameBoard[NUM_CELLS];
+      piece* gameBoard[WIDTH][HEIGHT];
+
     /* All coords of tokens that are able to jump, reset when rechecking jumps
      * Essentially a list of pairs of coordinates: the token and where it lands */
       std::list<moves> forcedJumps;
@@ -93,7 +93,7 @@ namespace draughts
         // bool promote_token(int, int);
       // Getters/Settters
         char get_token(int, int);
-        type get_type(int, int);
+        // type get_type(int, int);
         // coordinates get_token_jumped_over(int, int, int, int);
         // std::list<moves> get_forced_jumps(void);
         int get_width(void);
