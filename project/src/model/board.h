@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <list>
 
 #include "piece.h"
@@ -22,7 +24,6 @@
 // Height/width default to 8 (64 cells)
 const int WIDTH = 8;
 const int HEIGHT = 8;
-const int NUM_CELLS = 64;
 
 namespace draughts
 {
@@ -31,6 +32,7 @@ namespace draughts
     class board {
       // 2D array storing cell contents of the board
       piece* gameBoard[WIDTH][HEIGHT];
+      //std::unique_ptr<piece> gameBoard[WIDTH][HEIGHT];
 
     /* All coords of pieces that are able to jump, reset when rechecking jumps
      * Essentially a list of pairs of coordinates: the piece and where it lands */

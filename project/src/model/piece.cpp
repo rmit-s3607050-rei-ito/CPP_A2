@@ -16,20 +16,12 @@ draughts::model::piece::piece(team t) : pieceTeam(t)
 {
 }
 
-//
-
-// #################### Functions that can be overidden ####################
-
 // #################### Getters and Setters ####################
-bool draughts::model::piece::check_valid_move(int startx, int starty,
-                                              int endx, int endy)
+bool draughts::model::piece::check_valid_move(int x1, int y1, int x2, int y2)
 {
   // Movement difference for row and column
-  int rowMove = endx - startx;
-  int colMove = endy - starty;
-
-  // std::cout << "REACHED\n";
-  // std::cout << rowMove << "," << colMove << "\n";
+  int rowMove = x2 - x1;
+  int colMove = y2 - y1;
 
   // 1. Player tried to move forward or left/right
   if(rowMove == 0 || colMove == 0) {
@@ -37,19 +29,9 @@ bool draughts::model::piece::check_valid_move(int startx, int starty,
     return false;
   }
 
-  // Extra check. Player tried to move incorrectly with normal pieces
-  if(pieceTeam == RED && rowMove == UP) {
-    std::cout << imMsg << "Red cannot move up with a 'x' piece" << std::endl;
-    return false;
-  }
-  else if(pieceTeam == WHITE && rowMove == DOWN) {
-    std::cout << imMsg << "White cannot move down with a 'o' piece" << std::endl;
-    return false;
-  }
-
   /* 2. End coords cannot be both positive or both negative, must vary
    * if (Both positive || Both negative) */
-  if ((endx % 2 == 0 && endy % 2 == 0) || (endx % 2 != 0 && endy % 2 != 0)) {
+  if ((x2 % 2 == 0 && y2 % 2 == 0) || (x2 % 2 != 0 && y2 % 2 != 0)) {
     std::cout << imMsg << "The selected cell is not reachable" << std::endl;
     return false;
   }
