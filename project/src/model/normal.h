@@ -26,7 +26,6 @@ namespace draughts
       public:
         normal(team);
         type get_type(void);
-        //bool check_move(int,int);
         char get_icon(void);
     };
   }

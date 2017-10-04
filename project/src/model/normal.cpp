@@ -21,11 +21,6 @@ type draughts::model::normal::get_type(void)
   return NORMAL;
 }
 
-// bool check_move(int diffx, int diffy)
-// {
-//   return false;
-// }
-
 char draughts::model::normal::get_icon(void) {
   if(pieceTeam == RED)
     return RED_N_PIECE;

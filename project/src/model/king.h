@@ -26,8 +26,8 @@ namespace draughts
       public:
         king(team);
         type get_type(void);
-        //bool check_move(int,int);
         char get_icon(void);
+        coordinates get_backward_action(bool, int, int, int);
     };
   }
 }

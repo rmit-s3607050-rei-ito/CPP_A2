@@ -21,9 +21,8 @@ draughts::ncview::game_window::game_window(const player_pair & theplayers)
 void draughts::ncview::game_window::activate(void)
 {
   bool validMove = false;       // Move is of format x,y-x,y
-  // bool mustJump = false;        // Player must make their token jump
-  // bool isDraw = false;          // Game didnt end in a draw
-  //bool jumpMade = false;        // Jump made, check for extra jumps
+  bool mustJump = false;        // Player must make their piece jump
+  bool isDraw = false;          // Game didnt end in a draw
   moves move;                   // move to make
 
   while(!quit)
@@ -33,58 +32,58 @@ void draughts::ncview::game_window::activate(void)
     {
       display_board();
       playernum = themodel->get_current_player();
-      // Print out message on whose turn it is, their token type and their score
+      // Print out message on whose turn it is, their piece type and their score
       std::cout << "It is " << themodel->get_player_name(playernum)
-          << "'s turn (" << themodel->get_current_player_token()
+          << "'s turn (" << themodel->get_current_player_piece()
           << "), their score is " << themodel->get_player_score(playernum)
           << std::endl;
       // Check if a jump must be made and reset the fact one has been made if made
-      // mustJump = themodel->check_forced_jump();
+      mustJump = themodel->check_forced_jump();
 
       // Jump (2 cells diagonally)
-      // if(mustJump) {
-      //   std::cout << "Forced jump! A jump must be made" << std::endl;
-      //   // Get number of available options for the forced jump
-      //   std::list<moves> forcedMoves = themodel->get_forced_jumps();
-      //
-      //   // Only 1 forced move, automatically select first token
-      //   if(forcedMoves.size() == 1)
-      //     move = forcedMoves.front();
-      //   // More than one available option, player choses which move they want
-      //   else
-      //     move = get_jump_input(forcedMoves);
-      //
-      //   // Make a jump using the obtained move
-      //   themodel->make_move(move.first.first, move.first.second,
-      //                       move.second.first, move.second.second);
-      //   // Print out jump that has been made for clearer visualization
-      //   std::cout << "Token: " << move.first.first << "," << move.first.second <<
-      //          " ended at: " << move.second.first << "," << move.second.second <<
-      //   std::endl;
-      //
-      //   // Recheck if there are any more forced jumps, if so loop again using same player
-      //   if (!themodel->check_forced_jump())
-      //     themodel->swap_current_player();
-      // }
-      // // Normal move (1 cell diagonally at a time)
-      // else {
-      //   // Get input for a normal move for when there are no forced jumps
+      if(mustJump) {
+        std::cout << "Forced jump! A jump must be made" << std::endl;
+        // Get number of available options for the forced jump
+        std::list<moves> forcedMoves = themodel->get_forced_jumps();
+
+        // Only 1 forced move, automatically select first piece
+        if(forcedMoves.size() == 1)
+          move = forcedMoves.front();
+        // More than one available option, player choses which move they want
+        else
+          move = get_jump_input(forcedMoves);
+
+        // Make a jump using the obtained move
+        themodel->make_move(move.first.first, move.first.second,
+                            move.second.first, move.second.second);
+        // Print out jump that has been made for clearer visualization
+        std::cout << "Token: " << move.first.first << "," << move.first.second <<
+               " ended at: " << move.second.first << "," << move.second.second <<
+        std::endl;
+
+        // Recheck if there are any more forced jumps, if so loop again using same player
+        if (!themodel->check_forced_jump())
+          themodel->swap_current_player();
+      }
+      // Normal move (1 cell diagonally at a time)
+      else {
+        // Get input for a normal move for when there are no forced jumps
         while (!validMove) {
           move = get_move_input();
-          // validMove = themodel->make_move(move.first.first, move.first.second,
-          //                                 move.second.first, move.second.second);
+          validMove = themodel->make_move(move.first.first, move.first.second,
+                                          move.second.first, move.second.second);
         }
-      //   themodel->swap_current_player();  // Switch to next player after move made
-      //   validMove = false;                // Reset valid move for next player
-      // }
-      //
-      // // Check if the game has ended or not
-      // if(themodel->game_draw()) {
-      //   quit = true;
-      //   isDraw = true;
-      // }
-      // else
-      //   quit = themodel->game_ended();
+        themodel->swap_current_player();  // Switch to next player after move made
+        validMove = false;                // Reset valid move for next player
+      }
+
+      // Check if the game has ended or not
+      if(themodel->game_draw()) {
+        quit = true;
+        isDraw = true;
+      }
+      else
+        quit = themodel->game_ended();
     }
     catch(std::exception & ex) {
       std::cerr << ex.what() << std::endl;
@@ -96,10 +95,10 @@ void draughts::ncview::game_window::activate(void)
   display_board();
 
   // Obtain winner once game has ended
-  // if(!isDraw)
-  //   themodel->get_winner();
-  // else
-  //   themodel->get_draw_message();
+  if(!isDraw)
+    themodel->get_winner();
+  else
+    themodel->get_draw_message();
 }
 
 void draughts::ncview::game_window::display_board(void)
@@ -135,20 +134,20 @@ void draughts::ncview::game_window::print_row(int rownum)
   std::cout << rownum + 1;
   for(xcount = 0; xcount < themodel->get_width(); ++xcount)
   {
-    std::string token;
-    // When the token is an 'x' or 'X' color it red
-    if (themodel->get_token(rownum + 1, xcount + 1) == 'x'
-    ||themodel->get_token(rownum + 1, xcount + 1) == 'X') {
-      token = "\033[31m";
-      token.append(1, themodel->get_token(rownum + 1, xcount + 1));
-      token.append("\033[0m");
+    std::string piece;
+    // When the piece is an 'x' or 'X' color it red
+    if (themodel->get_piece(rownum + 1, xcount + 1) == 'x'
+    ||themodel->get_piece(rownum + 1, xcount + 1) == 'X') {
+      piece = "\033[31m";
+      piece.append(1, themodel->get_piece(rownum + 1, xcount + 1));
+      piece.append("\033[0m");
     }
-    // Color it white for any other token
+    // Color it white for any other piece
     else
-      token = themodel->get_token(rownum + 1, xcount + 1);
+      piece = themodel->get_piece(rownum + 1, xcount + 1);
 
-    // Separate tokens using spaces and delimeter '|'
-    std::cout << " " << token << " |";
+    // Separate pieces using spaces and delimeter '|'
+    std::cout << " " << piece << " |";
   }
   std::cout << std::endl;
 }

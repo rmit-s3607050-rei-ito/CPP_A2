@@ -21,14 +21,31 @@ type draughts::model::king::get_type(void)
   return KING;
 }
 
-// bool check_move(int diffx, int diffy)
-// {
-//   return false;
-// }
-
 char draughts::model::king::get_icon(void) {
   if(pieceTeam == RED)
     return RED_K_PIECE;
   else
     return WHITE_K_PIECE;
+}
+
+coordinates draughts::model::king::get_backward_action(bool jump, int x, int y,
+                                                       int direction) {
+  // Essentially the reverse of a forward action, see piece.cpp for commenting
+  int forwardX, forwardY;
+  int movement;
+  if(pieceTeam == RED) {
+    if(jump)
+      movement = UP_JUMP;
+    else
+      movement = UP;
+  } else {
+    if(jump)
+      movement = DOWN_JUMP;
+    else
+      movement = DOWN;
+  }
+
+  forwardX = x + movement;
+  forwardY = y + direction;
+  return std::make_pair(forwardX, forwardY);
 }

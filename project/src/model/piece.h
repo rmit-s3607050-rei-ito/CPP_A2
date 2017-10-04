@@ -11,7 +11,6 @@
 
 #pragma once
 
-#include <iostream>
 #include "util.h"
 
 namespace draughts
@@ -22,16 +21,18 @@ namespace draughts
     {
       protected:
         team pieceTeam;
-        //coordinates position;
 
       public:
+        // Constructor
         piece(team);
-        // Getters/Settters
-        // 1. To be overidden
+        // 1. To be overidden, = 0 means no base version
         virtual type get_type(void) = 0;
-        virtual char get_icon(void) = 0;  // Get specific character for a piece
+        virtual char get_icon(void) = 0;
         // 2. Preset, cannot override
+        bool check_possible_move(void);
+        bool check_valid_move(int, int, int, int);
         team get_team(void);
+        coordinates get_forward_action(bool, int, int, int);
     };
   }
 }

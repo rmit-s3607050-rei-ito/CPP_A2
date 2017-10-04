@@ -20,7 +20,7 @@ draughts::model::player::player(team t) : playerTeam(t)
 // Blank slate starting parameters for player
 void draughts::model::player::initialize(void){
   playerScore = 0;
-  numTokens = STARTING_TOKENS;
+  numPieces = NUM_STARTING_PIECES;
 }
 
 // #################### Getters and Setters ####################
@@ -28,8 +28,8 @@ int draughts::model::player::get_id(void) {
   return playerID;
 }
 
-int draughts::model::player::get_num_tokens(void) {
-  return numTokens;
+int draughts::model::player::get_num_pieces(void) {
+  return numPieces;
 }
 
 int draughts::model::player::get_score(void) {
@@ -44,13 +44,9 @@ void draughts::model::player::set_id(int pID) {
   playerID = pID;
 }
 
-// void draughts::model::player::set_team(team t) {
-//   playerTeam = t;
-// }
-
 // #################### Incremental change ####################
-void draughts::model::player::reduce_token_count(void) {
-  numTokens--;
+void draughts::model::player::reduce_piece_count(void) {
+  numPieces--;
 }
 
 void draughts::model::player::increment_score(void) {
