@@ -1,0 +1,14 @@
+
+For file:
+  player_selection_window.cpp:
+Function:
+  activate();
+
+Replace all with:
+  // quick access
+  draughts::model::model * themodel = draughts::model::model::get_instance();
+  themodel->add_player("pacific");
+  themodel->add_player("rei");
+  selected_list[0] = "pacific";
+  selected_list[1] = "rei";
+  thecontroller->start_game(selected_list);
