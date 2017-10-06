@@ -1,3 +1,4 @@
+
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -9,18 +10,21 @@
  * -----------------------------------------------------------------------------
  */
 
-#include "empty.h"
+#include "main_menu.h"
+#include "../nc_controller/command.h"
+#include "../nc_controller/controller.h"
 
-// Constructor, calls parent using parameters
-draughts::model::empty::empty(team t) : piece(t)
+const std::vector<std::string> draughts::ncview::main_menu::strings = {
+  "Add Player to the system",
+  "Play Game", "Exit Game"
+};
+
+draughts::ncview::main_menu::main_menu(void) : menu("English Draughts", strings,
+  draughts::nc_controller::controller::controller::get_instance()
+  ->get_main_menu_commands())
 {
 }
 
-type draughts::model::empty::get_type(void)
+draughts::ncview::main_menu::~main_menu(void)
 {
-  return EMPTY;
-}
-
-char draughts::model::empty::get_icon(void) {
-  return EMPTY_PIECE;
 }

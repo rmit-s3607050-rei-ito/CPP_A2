@@ -1,3 +1,4 @@
+
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -9,24 +10,20 @@
  * -----------------------------------------------------------------------------
  */
 
-#pragma once
+#include "menu.h"
 
-// Inheriting from piece
-#include "piece.h"
-// Piece char representation
-const char EMPTY_PIECE = ' ';
+#pragma once
 
 namespace draughts
 {
-  namespace model
+  namespace ncview
   {
-    class empty : public piece
+    class main_menu : public menu
     {
+      static const std::vector<std::string> strings;
       public:
-        empty(team);
-        // Overridden functions
-        type get_type(void);
-        char get_icon(void);
+        main_menu(void);
+        virtual ~main_menu(void);
     };
   }
 }

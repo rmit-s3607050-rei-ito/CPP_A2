@@ -18,31 +18,33 @@ draughts::model::board::board(void)
 
 // #################### Initialization and validation ####################
 void draughts::model::board::init_board() {
-  std::unique_ptr<piece> emptyCell, redPiece, whitePiece;
-  emptyCell = std::make_unique<empty>(NO_TEAM);
-  redPiece = std::make_unique<normal>(RED);
-  whitePiece = std::make_unique<normal>(WHITE);
+  piece *redPiece, *whitePiece, *emptyCell;
+  emptyCell = new empty(NO_TEAM);
+  redPiece = new normal(RED);
+  whitePiece = new normal(WHITE);
+  // std::unique_ptr<piece> emptyCell = std::make_unique<piece>(empty(NO_TEAM));
+  // std::unique_ptr<piece> whitePiece = std::make_unique<piece>(normal(WHITE));
+  // std::unique_ptr<piece> redPiece = std::make_unique<piece>(normal(RED));
 
   for(int row = 0; row < WIDTH; row++) {
     for (int col = 0; col < HEIGHT; col++) {
       // Fill gaps between pieces with empty spaces
-      if(((col + row) % 2) == 0) {
-        std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
-        gameBoard[row][col] = std::move(emptyCell);
-      } else {
+      if(((col + row) % 2) == 0)
+        gameBoard[row][col] = emptyCell;
+        // gameBoard[row][col] = std::move(emptyCell);
+      else {
         // Initialize middle rows (3 and 4) as empty
-        if (row > X_END && row < O_START) {
-          std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
-          gameBoard[row][col] = std::move(emptyCell);
-        } // Initialize red 'x' pieces
-        else if (row <= X_END) {
-          std::unique_ptr<piece> redPiece = std::make_unique<normal>(RED);
-          gameBoard[row][col] = std::move(redPiece);
+        if (row > X_END && row < O_START)
+          gameBoard[row][col] = emptyCell;
+          // gameBoard[row][col] = std::move(emptyCell);
+        // Initialize red 'x' pieces
+        else if (row <= X_END)
+          gameBoard[row][col] = redPiece;
+          // gameBoard[row][col] = std::move(redPiece);
         // Initialize white 'o' pieces
-        } else {
-          std::unique_ptr<piece> whitePiece = std::make_unique<normal>(WHITE);
-          gameBoard[row][col] = std::move(whitePiece);
-        }
+        else
+          gameBoard[row][col] = whitePiece;
+          // gameBoard[row][col] = std::move(whitePiece);
       }
     }
   }
@@ -98,7 +100,8 @@ bool draughts::model::board::check_valid_selection(team playerTeam, int x, int y
 
 bool draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
 {
-  piece *currentPiece = gameBoard[x1][y1].get();   // Piece selected
+  // piece *currentPiece = gameBoard[x1][y1].get();   // Piece selected
+  piece *currentPiece = gameBoard[x1][y1];         // Piece selected
   type currType = gameBoard[x1][y1]->get_type();   // Type of piece selected
   team currTeam = gameBoard[x1][y1]->get_team();   // Team selected to jump
   team landTeam = gameBoard[x2][y2]->get_team();   // Landing spot
@@ -207,7 +210,8 @@ bool draughts::model::board::check_all_possible_moves(int xPieces, int oPieces)
 
 bool draughts::model::board::check_move_direction(int row, int col, int direction)
 {
-  piece *currentPiece = gameBoard[row][col].get();  // Piece being checked
+  // piece *currentPiece = gameBoard[row][col].get();  // Piece being checked
+    piece *currentPiece = gameBoard[row][col];  // Piece being checked
   coordinates forward; // Coordinates of landing spot after move
   coordinates back;    // Also for landing spot, for king pieces only
   type currentType = gameBoard[row][col]->get_type();  // Type of piece to move
@@ -278,7 +282,8 @@ bool draughts::model::board::check_all_possible_jumps(team playerTeam, int count
 bool draughts::model::board::check_jump_direction(int x, int y, int direction)
 {
   // Mostly same as check_move_direction(), some extra comments/additions made.
-  piece *currentPiece = gameBoard[x][y].get();
+  // piece *currentPiece = gameBoard[x][y].get();
+  piece *currentPiece = gameBoard[x][y];
   type currentType = gameBoard[x][y]->get_type();
   coordinates forward, back;
 
@@ -356,18 +361,12 @@ bool draughts::model::board::can_jump(int x1, int y1, int x2, int y2)
 // #################### Score related functions ####################
 bool draughts::model::board::move_piece(int x1, int y1, int x2, int y2)
 {
-  // Moved piece parameters
-  type movedType = gameBoard[x1][y1]->get_type();
-  team movedTeam = gameBoard[x1][y1]->get_team();
-  // Create new piece that is a duplicate to the old to move to the new location
-  std::unique_ptr<piece> movedPiece;
-  if (movedType == NORMAL)
-    movedPiece = std::make_unique<normal>(movedTeam);
-  else
-    movedPiece = std::make_unique<king>(movedTeam);
-
-  // Empty cell to allocate to cell where piece moved from
-  std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
+  // pointer to piece that is going to be moved
+  piece * movedPiece = gameBoard[x1][y1];
+  // std::unique_ptr<piece> movedPiece = std::make_unique<piece>(gameBoard[x1][y1]);
+  // Empty cell to allocate to cell where piece moved from and jumped over (if done)
+  piece * emptyCell = new empty(NO_TEAM);
+  // std::unique_ptr<piece> emptyCell = std::make_unique<piece>(empty(NO_TEAM));
 
   coordinates coords;           // Coordinates of cell to remove if jumped over
   bool scoreUpdate = false;     // Flag to tell model if score is to be updated
@@ -377,20 +376,20 @@ bool draughts::model::board::move_piece(int x1, int y1, int x2, int y2)
   /* Check if player moved two spaces, Since bad cases have been caught,
    * this is when a enemy piece is to be removed */
   if (colMove == DOWN_JUMP || colMove == UP_JUMP) {
-    // Create an empty cell if a piece has been jumped over
-    std::unique_ptr<piece> emptyJumpCell = std::make_unique<empty>(NO_TEAM);
     // Get coordinates of piece that is jumped over
     coords = get_coordinates_of_jump(x1, y1, x2, y2);
     // Set it to empty
-    gameBoard[coords.first][coords.second] = std::move(emptyJumpCell);
+    gameBoard[coords.first][coords.second] = std::move(emptyCell);
     // Increase score of current player by 1
     scoreUpdate = true;
   }
 
   // Set new cell contents to contain the piece moved
-  gameBoard[x2][y2] = std::move(movedPiece);
+  // gameBoard[x2][y2] = std::move(movedPiece);
+  gameBoard[x2][y2] = movedPiece;
   // Set original cell where piece moved from to be empty
-  gameBoard[x1][y1] = std::move(emptyCell);
+  // gameBoard[x1][y1] = std::move(emptyCell);
+  gameBoard[x1][y1] = emptyCell;
   // Return score update (0 if no jump has been made, +1 if so)
   return scoreUpdate;
 }
@@ -400,16 +399,18 @@ bool draughts::model::board::promote_piece(int x, int y)
   // Return 1 if piece has been promoted (+1 score), or 0 when no promotion
   type pieceType = gameBoard[x][y]->get_type();
   team pieceTeam;
-  std::unique_ptr<piece> kingPiece;
+  // std::unique_ptr<piece> kingPiece;
+  piece * kingPiece;
 
   // Only able to promote normal 'o' and normal 'x' pieces
   if(pieceType == NORMAL) {
     // Get the team the piece belongs to
     pieceTeam = gameBoard[x][y]->get_team();
     // Create a king piece with same team
-    kingPiece = std::make_unique<king>(pieceTeam);
+    kingPiece = new king(pieceTeam);
     // Place the king piece on the board
-    gameBoard[x][y] = std::move(kingPiece);
+    // gameBoard[x][y] = std::move(kingPiece);
+    gameBoard[x][y] = kingPiece;
 
     return true;
   }
