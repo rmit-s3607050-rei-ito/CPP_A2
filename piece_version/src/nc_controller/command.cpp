@@ -1,3 +1,4 @@
+
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -9,24 +10,7 @@
  * -----------------------------------------------------------------------------
  */
 
-#pragma once
-
-// Inheriting from piece
-#include "piece.h"
-// Piece char representation
-const char EMPTY_PIECE = ' ';
-
-namespace draughts
-{
-  namespace model
-  {
-    class empty : public piece
-    {
-      public:
-        empty(team);
-        // Overridden functions
-        type get_type(void);
-        char get_icon(void);
-    };
-  }
-}
+#include "command.h"
+#include "../ncview/ui.h"
+draughts::ncview::ui * draughts::nc_controller::command::view =
+draughts::ncview::ui::get_instance();

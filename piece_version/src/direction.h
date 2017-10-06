@@ -1,3 +1,4 @@
+
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -9,24 +10,12 @@
  * -----------------------------------------------------------------------------
  */
 
+#include <climits>
 #pragma once
-
-// Inheriting from piece
-#include "piece.h"
-// Piece char representation
-const char EMPTY_PIECE = ' ';
-
 namespace draughts
 {
-  namespace model
+  enum class direction
   {
-    class empty : public piece
-    {
-      public:
-        empty(team);
-        // Overridden functions
-        type get_type(void);
-        char get_icon(void);
-    };
-  }
+    UP=-1, DOWN=1, BOTH=2, INVALID=INT_MAX
+  };
 }

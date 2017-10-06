@@ -45,8 +45,8 @@ namespace draughts
       moves get_jump_input(std::list<moves>);
       coordinates strtocoord(const std::string&);
 
-      // Input validation, uses exception hence void type
-      void validate_move_input(const std::string &);
+      // Input validation
+      bool validate_move_input(const std::string &);
 
       public:
         game_window(const player_pair&);

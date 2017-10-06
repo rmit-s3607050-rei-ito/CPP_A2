@@ -30,8 +30,8 @@ namespace draughts
   {
     class board {
       // 2D array storing cell contents of the board
-      // piece* gameBoard[WIDTH][HEIGHT];
-      std::unique_ptr<piece> gameBoard[WIDTH][HEIGHT];
+      piece* gameBoard[WIDTH][HEIGHT];
+      // std::unique_ptr<piece> gameBoard[WIDTH][HEIGHT];
 
     /* All coords of pieces that are able to jump, reset when rechecking jumps
      * Essentially a list of pairs of coordinates: the piece and where it lands */
