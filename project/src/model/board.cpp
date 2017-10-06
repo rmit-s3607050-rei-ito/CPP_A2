@@ -46,36 +46,6 @@ void draughts::model::board::init_board() {
       }
     }
   }
-
-  // gameBoard[0][1] = emptyCell;
-  // gameBoard[1][2] = redPiece;
-
-  // Test draw
-  // gameBoard[1][0] = redPiece;
-  // gameBoard[2][3] = redPiece;
-  // gameBoard[2][5] = redPiece;
-  // gameBoard[2][7] = redPiece;
-  // gameBoard[3][0] = redPiece;
-  // gameBoard[3][2] = redPiece;
-  // gameBoard[3][4] = redPiece;
-  // gameBoard[3][6] = redPiece;
-  //
-  // gameBoard[4][1] = whitePiece;
-  // gameBoard[4][3] = whitePiece;
-  // gameBoard[4][5] = whitePiece;
-  // gameBoard[4][7] = whitePiece;
-  // gameBoard[5][0] = whitePiece;
-  // gameBoard[5][2] = whitePiece;
-  // gameBoard[5][4] = whitePiece;
-  // gameBoard[5][6] = whitePiece;
-
-  // gameBoard[2][1] = emptyCell;
-  // gameBoard[4][1] = redPiece;
-  //
-  // gameBoard[4][3] = whitePiece;
-  // gameBoard[4][5] = whitePiece;
-  // gameBoard[5][0] = emptyCell;
-  // gameBoard[6][1] = emptyCell;
 }
 
 bool draughts::model::board::check_valid_selection(team playerTeam, int x, int y)

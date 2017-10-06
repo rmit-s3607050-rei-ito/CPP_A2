@@ -185,8 +185,14 @@ moves draughts::ncview::game_window::get_move_input(void)
   // Loop ensuring that user enters input in correct format
   bool validInput = false;
   while (!validInput) {
-    input = get_input("Please enter your next move, Format = row,col-row,col");
-    validInput = validate_move_input(input);
+    try {
+      input = get_input("Please enter your next move, Format = row,col-row,col");
+      validate_move_input(input);
+      validInput = true;  // Break when validate_move_input doesn't throw exception
+    }
+    catch (std::string errorMessage) {
+      std::cout << errorMessage << std::endl;
+    }
   }
 
   // Split input and store into moves based on delimeter '-'
@@ -241,16 +247,12 @@ coordinates draughts::ncview::game_window::strtocoord(const std::string& input)
 }
 
 // #################### Input validation ####################
-bool draughts::ncview::game_window::validate_move_input(const std::string &input){
-  bool validMove = false;
+void draughts::ncview::game_window::validate_move_input(const std::string &input){
+  //bool validMove = false;
   std::regex moveCheck(REGULAR_MOVE_REGEX);
   std::string invalidMove = imMsg +
     "Coordinates = (across,down). Values between 1-8, separated by ','";
 
-  if (std::regex_match(input, moveCheck))
-    validMove = true;
-  else
-    std::cout << invalidMove << std::endl;
-
-  return validMove;
+  if (!std::regex_match(input, moveCheck))
+    throw invalidMove;
 }
