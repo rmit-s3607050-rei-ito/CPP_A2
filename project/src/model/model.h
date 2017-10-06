@@ -42,7 +42,6 @@ namespace draughts
       // Game parameters
       private:
         player *currentPlayer;  // Which player is taking their turn
-        // std::unique_ptr<player> currentPlayer;  // Which player is taking their turn
         player red;             // player using red 'x' pieces
         player white;           // player using white 'o' pieces
 
@@ -55,7 +54,7 @@ namespace draughts
 
         static std::unique_ptr<model> instance;
         model(void);                            // Constructor
-        bool player_exists(const std::string&);
+        void player_exists(const std::string&); // Throws exception (not bool)
 
       public:
         // Model instance related functions
@@ -66,8 +65,10 @@ namespace draughts
         // Game related functions
         void start_game(int, int);
         void swap_current_player(void);
-        bool make_move(int, int, int, int);
-        bool check_forced_jump(void);
+        void make_move(int, int, int, int);
+        bool check_individual_jump(int, int);
+        bool check_all_forced_jumps(void);
+        // Game state
         bool game_draw(void);
         bool game_ended(void);
         void get_winner(void);
@@ -79,7 +80,7 @@ namespace draughts
         int get_current_player(void);
         std::string get_player_name(int);
         std::map<int, std::string> get_player_list(void) const;
-        bool add_player(const std::string &);
+        void add_player(const std::string &);
         char get_current_player_piece(void);
         void reduce_player_pieces(void);
 

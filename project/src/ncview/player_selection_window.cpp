@@ -31,45 +31,45 @@ std::string draughts::ncview::player_selection_window::players_to_string(void)
 
 void draughts::ncview::player_selection_window::activate(void)
 {
-  if(full_list.size() < NUM_PLAYERS)
-  {
-   std::cerr << "error: there aren't enough players registered "
-       << "to play a game. Go back and register more players."
-       << std::endl;
-   return;
-  }
-  while(selected_list.size() < NUM_PLAYERS)
-  {
-   if(selected_list.size() > 0)
-   {
-     std::cout << "You have selected the following player(s) to play the game: "
-         << std::endl;
-     for(auto & pair : selected_list)
-     {
-       std::cout << pair.second << std::endl;
-     }
-   }
-   if(selected_list.size() == NUM_PLAYERS)
-   {
-     std::cout << "starting a game with the following players "
-         << players_to_string() << std::endl;
-   }
-   std::vector<std::string> strings = player_strings(full_list, selected_list);
-   std::vector<std::unique_ptr<nc_controller::command>> actions
-       = create_actions(full_list,  selected_list);
-   menu playersmenu("Select a Player to add to the game",
-           strings, std::move(actions));
-   playersmenu.activate();
-  }
-  thecontroller->start_game(selected_list);
+  // if(full_list.size() < NUM_PLAYERS)
+  // {
+  //  std::cerr << "error: there aren't enough players registered "
+  //      << "to play a game. Go back and register more players."
+  //      << std::endl;
+  //  return;
+  // }
+  // while(selected_list.size() < NUM_PLAYERS)
+  // {
+  //  if(selected_list.size() > 0)
+  //  {
+  //    std::cout << "You have selected the following player(s) to play the game: "
+  //        << std::endl;
+  //    for(auto & pair : selected_list)
+  //    {
+  //      std::cout << pair.second << std::endl;
+  //    }
+  //  }
+  //  if(selected_list.size() == NUM_PLAYERS)
+  //  {
+  //    std::cout << "starting a game with the following players "
+  //        << players_to_string() << std::endl;
+  //  }
+  //  std::vector<std::string> strings = player_strings(full_list, selected_list);
+  //  std::vector<std::unique_ptr<nc_controller::command>> actions
+  //      = create_actions(full_list,  selected_list);
+  //  menu playersmenu("Select a Player to add to the game",
+  //          strings, std::move(actions));
+  //  playersmenu.activate();
+  // }
+  // thecontroller->start_game(selected_list);
 
   // quick access
-  // draughts::model::model * themodel = draughts::model::model::get_instance();
-  // themodel->add_player("pacific");
-  // themodel->add_player("rei");
-  // selected_list[0] = "pacific";
-  // selected_list[1] = "rei";
-  // thecontroller->start_game(selected_list);
+  draughts::model::model * themodel = draughts::model::model::get_instance();
+  themodel->add_player("pacific");
+  themodel->add_player("rei");
+  selected_list[0] = "pacific";
+  selected_list[1] = "rei";
+  thecontroller->start_game(selected_list);
 }
 
 
