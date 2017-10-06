@@ -26,8 +26,8 @@ namespace draughts
       public:
         king(team);
         // Overridden functions
-        type get_type(void);
-        char get_icon(void);
+        virtual type get_type(void) override;
+        virtual char get_icon(void) override;
         // Own unique function
         coordinates get_backward_action(bool, int, int, int);
     };

@@ -62,14 +62,6 @@ void draughts::ncview::player_selection_window::activate(void)
    playersmenu.activate();
   }
   thecontroller->start_game(selected_list);
-
-  // quick access
-  // draughts::model::model * themodel = draughts::model::model::get_instance();
-  // themodel->add_player("pacific");
-  // themodel->add_player("rei");
-  // selected_list[0] = "pacific";
-  // selected_list[1] = "rei";
-  // thecontroller->start_game(selected_list);
 }
 
 

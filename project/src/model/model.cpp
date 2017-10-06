@@ -16,27 +16,24 @@ std::unique_ptr<draughts::model::model> draughts::model::model::instance =
 nullptr;
 
 // Private function, input validation: checking if player is already in list
-bool draughts::model::model::player_exists(const std::string &pname)
+void draughts::model::model::player_exists(const std::string &pname)
 {
-  /* NOTE: Essentially the same logic as get_player_name, so majority of
-   * commenting has been left out */
-
-  // Flag to determine whether player exists
-  bool found = false;
+  // Iterator through player list
   auto player = playerList.begin();
+  // Name of player being checked and the error message for exception case
   std::string playerName = "";
+  std::string existingPlayerMessage = "";
 
   while(player != playerList.end()){
     playerName = player->second;
 
+    // Throw exception when player has not been found
     if(pname == playerName) {
-      found = true;
-      break;
+      existingPlayerMessage = pname + " already exists in the roster";
+      throw existingPlayerMessage;
     }
     player++;
   }
-
-  return found;
 }
 
 // Constructor for model, player types and none registered
@@ -66,8 +63,11 @@ draughts::model::model::~model(void)
 // #################### Game related functions ####################
 void draughts::model::model::start_game(int plr1, int plr2)
 {
-  // All of these ensure replayability, refreshing game parameters every time
-  srand(time(NULL));
+  // 1. Setting up random generation for player selection
+  std::random_device rd;                  // 1a. Create a random device
+  std::default_random_engine dre(rd());   // 1b. Create a random engine, device param
+  std::uniform_int_distribution<int> uid(MIN, MAX); // 1c. Create the range of values
+  int startingPlayer = uid(dre);          // 1d. Store the randomly generated number
 
   // 2. Initialize game board
   gameBoard.init_board();
@@ -76,8 +76,7 @@ void draughts::model::model::start_game(int plr1, int plr2)
   red.initialize();
   white.initialize();
 
-  // 5. Randomly decide which player is assigned to 'x' and 'o' pieces
-  int startingPlayer = rand() % 2;
+  // 4. Randomly decide which player is assigned to 'x' and 'o' pieces
   if (startingPlayer == 0) {
     red.set_id(plr1);
     white.set_id(plr2);
@@ -87,23 +86,18 @@ void draughts::model::model::start_game(int plr1, int plr2)
   }
 
   // Given the rules, the player with x pieces always go first
-  // currentPlayer = std::move(std::make_unique<player>(red));
   currentPlayer = &red;
 }
 
-void draughts::model::model::swap_current_player(void){
-  // if(currentPlayer == std::make_unique<player>(red))
-  //   currentPlayer = std::make_unique<player>(white);
-  // else
-  //   currentPlayer = std::make_unique<player>(red);
-
+void draughts::model::model::swap_current_player(void)
+{
   if(currentPlayer == &red)
     currentPlayer = &white;
   else
     currentPlayer = &red;
 }
 
-bool draughts::model::model::make_move(int startx, int starty, int endx, int endy)
+void draughts::model::model::make_move(int startx, int starty, int endx, int endy)
 {
   // Same as get_piece: since array starts from 0, we need to minus 1 from input
   startx -= ARRAY_DIFF;
@@ -112,57 +106,55 @@ bool draughts::model::model::make_move(int startx, int starty, int endx, int end
   endy -= ARRAY_DIFF;
 
   team playerTeam = currentPlayer->get_team();
-  // Validation for both start and end coordinates
-  bool validSelection = false;        // (startx, starty)
-  bool validMove = false;             // (endx, endy)
   // Determine whether score is to be updated or piece counts
   bool capturedToken = false;
   bool promotion = false;
 
   // 1. Catch when player selected same start and end positions
-  if (startx == endx && starty == endy) {
-    std::cout << "Invalid move, start and end are the same." << std::endl;
-    return false;
-  }
-  else { // 2. Check if player selected right piece
-    validSelection = gameBoard.check_valid_selection(playerTeam, startx, starty);
+  if (startx == endx && starty == endy)
+    throw std::string("Invalid move, start and end are the same");
 
+  else { // 2. Check if player selected right piece
+    gameBoard.check_valid_selection(playerTeam, startx, starty);
     // When right piece selected, check if they entered in a possible move
-    if (validSelection)
-      validMove = gameBoard.check_valid_move(startx, starty, endx, endy);
+    gameBoard.check_valid_move(startx, starty, endx, endy);
   }
 
   // When all checks have been passed move the piece and swap players
-  if(validMove) {
-    // Move the piece
-    capturedToken = gameBoard.move_piece(startx, starty, endx, endy);
-    // If move resulted in a piece being removed from the game
-    if(capturedToken) {
-      // Add 1 to score and reduce number of pieces for other player by 1
-      currentPlayer->increment_score();
-      reduce_player_pieces();
-    }
-    // // If move resulted in piece ending up at the opposite end of the board
-    if (endx == X_START || endx == O_END) {
-      // Try to promote the piece
-      promotion = gameBoard.promote_piece(endx, endy);
-      // Add 1 to score if the piece has been successfully promoted
-      if (promotion)
-        currentPlayer->increment_score();
-    }
+  capturedToken = gameBoard.move_piece(startx, starty, endx, endy);
+  // If move resulted in a piece being removed from the game
+  if(capturedToken) {
+    // Add 1 to score and reduce number of pieces for other player by 1
+    currentPlayer->increment_score();
+    reduce_player_pieces();
   }
-  return validMove;
+  // // If move resulted in piece ending up at the opposite end of the board
+  if (endx == X_START || endx == O_END) {
+    // Try to promote the piece, nothing happens if piece is of king type
+    promotion = gameBoard.promote_piece(endx, endy);
+    // Add 1 to score if the piece has been successfully promoted
+    if (promotion)
+      currentPlayer->increment_score();
+  }
 }
 
-bool draughts::model::model::check_forced_jump(void)
+bool draughts::model::model::check_individual_jump(int x, int y) {
+  // Clear the list of all previous possible jumps and check for individual jump
+  gameBoard.reset_jump_list();
+  // Check if the piece at the particular spot can jump again
+  return gameBoard.check_individual_jump(x, y);
+}
+
+bool draughts::model::model::check_all_forced_jumps(void)
 {
-  // Check if a player is forced to make a jump
+  // Check if the current player is forced to make a jump
   team currentTeam = currentPlayer->get_team();
   int numPieces = currentPlayer->get_num_pieces();
 
   return gameBoard.check_all_possible_jumps(currentTeam, numPieces);
 }
 
+// #################### Game state ####################
 bool draughts::model::model::game_draw(void)
 {
   bool possibleMove;
@@ -272,13 +264,10 @@ std::map<int, std::string> draughts::model::model::get_player_list(void) const
   return playerList;
 }
 
-/*  NOTE: return type changed from void to bool, to determine whether add player
- * was successful, false = could not add new player, true = added to list */
-bool draughts::model::model::add_player(const std::string& p)
+void draughts::model::model::add_player(const std::string& p)
 {
-  // Immediately exit if player already present in map, otherwise proceed
-  if(player_exists(p))
-    return false;
+  /* Check if player exists or not if so exception is thrown */
+  player_exists(p);
 
   // Get total number of players to determine ID to allocate
   int pID = get_player_count();
@@ -289,8 +278,6 @@ bool draughts::model::model::add_player(const std::string& p)
   // Add player to map and increment total number of players registered by 1
   playerList.insert(player);
   playerCount++;
-
-  return true;
 }
 
 char draughts::model::model::get_current_player_piece()
@@ -309,11 +296,6 @@ char draughts::model::model::get_current_player_piece()
 
 void draughts::model::model::reduce_player_pieces()
 {
-  // if(currentPlayer == std::make_unique<player>(red))
-  //   white.reduce_piece_count();
-  // else
-  //   red.reduce_piece_count();
-
   if(currentPlayer == &red)
     white.reduce_piece_count();
   else

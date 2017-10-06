@@ -39,6 +39,7 @@ namespace draughts
       void print_line(int);
       void print_row(int);
       void print_possible_jumps(std::list<moves>);
+      void print_turn_info(void);
 
       // Retrieve input from user
       moves get_move_input(void);
@@ -47,6 +48,9 @@ namespace draughts
 
       // Input validation, uses exception hence void type
       void validate_move_input(const std::string &);
+
+      // Forced jumping
+      moves perform_forced_jump(void);
 
       public:
         game_window(const player_pair&);

@@ -30,7 +30,6 @@ namespace draughts
   {
     class board {
       // 2D array storing cell contents of the board
-      // piece* gameBoard[WIDTH][HEIGHT];
       std::unique_ptr<piece> gameBoard[WIDTH][HEIGHT];
 
     /* All coords of pieces that are able to jump, reset when rechecking jumps
@@ -40,15 +39,16 @@ namespace draughts
       public:
         // Constructor
         board(void);
-        // Initialization and validation
+        // Initialization and validation (via exceptions)
         void init_board();
-        bool check_valid_selection(team, int, int);
-        bool check_valid_move(int, int, int, int);
+        void check_valid_selection(team, int, int);
+        void check_valid_move(int, int, int, int);
         // Move validation
         bool check_all_possible_moves(int, int);
         bool check_move_direction(int, int, int);
         // Jumping validation
         bool check_all_possible_jumps(team, int);
+        bool check_individual_jump(int, int);
         bool check_jump_direction(int, int, int);
         bool can_jump(int, int, int, int);
         // Score related functions
@@ -58,6 +58,7 @@ namespace draughts
         char get_piece(int, int);
         coordinates get_coordinates_of_jump(int, int, int, int);
         std::list<moves> get_forced_jumps(void);
+        void reset_jump_list(void);
         int get_width(void);
         int get_height(void);
     };

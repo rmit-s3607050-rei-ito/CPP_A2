@@ -17,12 +17,9 @@ draughts::model::board::board(void)
 }
 
 // #################### Initialization and validation ####################
-void draughts::model::board::init_board() {
-  std::unique_ptr<piece> emptyCell, redPiece, whitePiece;
-  emptyCell = std::make_unique<empty>(NO_TEAM);
-  redPiece = std::make_unique<normal>(RED);
-  whitePiece = std::make_unique<normal>(WHITE);
-
+void draughts::model::board::init_board()
+{
+  // Iterate through each cell in the board and fill it with a piece, or empty
   for(int row = 0; row < WIDTH; row++) {
     for (int col = 0; col < HEIGHT; col++) {
       // Fill gaps between pieces with empty spaces
@@ -48,31 +45,33 @@ void draughts::model::board::init_board() {
   }
 }
 
-bool draughts::model::board::check_valid_selection(team playerTeam, int x, int y)
+void draughts::model::board::check_valid_selection(team playerTeam, int x, int y)
 {
   team selectedTeam = gameBoard[x][y]->get_team(); // team of selected piece
+  std::string invalidSelection = isMsg;
 
-  // 1 Selected a piece that belongs to them exit
-  if(playerTeam == selectedTeam)
-    return true;
-
-  // 2. Tried to select an empty cell
-  if(selectedTeam == NO_TEAM)
-    std::cout << isMsg << "No piece to move at this cell" << std::endl;
-  else // 3. Selected a piece that does not belong to them
-    std::cout << isMsg << "This piece does not belong to you" << std::endl;
-
-  // Return false when either statements in 2. are true
-  return false;
+  // 1. Tried to select an empty cell
+  if(selectedTeam == NO_TEAM) {
+    invalidSelection += "No piece to move at this cell";
+    throw invalidSelection;
+  }
+  // 2. Selected a piece that does not belong to them
+  else if (playerTeam != selectedTeam) {
+    invalidSelection += "This piece does not belong to you";
+    throw invalidSelection;
+  }
 }
 
-bool draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
+void draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
 {
   piece *currentPiece = gameBoard[x1][y1].get();   // Piece selected
   type currType = gameBoard[x1][y1]->get_type();   // Type of piece selected
   team currTeam = gameBoard[x1][y1]->get_team();   // Team selected to jump
   team landTeam = gameBoard[x2][y2]->get_team();   // Landing spot
   team jumpTeam;                                   // What was jumped over
+
+  // String to throw as an exception
+  std::string invalidMove = imMsg;
 
   // Coords of cell jumped over
   std::pair<int,int> jumpCoords;
@@ -84,18 +83,17 @@ bool draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
   // A. Check if piece was a normal type whether it tried to move backwards
   if(currType == NORMAL) {
     if(currTeam == RED && rowMove == UP) {
-      std::cout << imMsg << "Red cannot move up with a 'x' piece" << std::endl;
-      return false;
+      invalidMove += "Red cannot move up with a 'x' piece";
+      throw invalidMove;
     }
     else if(currTeam == WHITE && rowMove == DOWN) {
-      std::cout << imMsg << "White cannot move down with a 'o' piece" << std::endl;
-      return false;
+      invalidMove += "White cannot down up with a 'o' piece";
+      throw invalidMove;
     }
   }
 
   // B. Check all other movement types with the piece itself
-  if(!(currentPiece->check_valid_move(x1, y1, x2, y2)))
-    return false;
+  currentPiece->check_valid_move(x1, y1, x2, y2);
 
   // C. Perform board checks comparing if a jump was to be made
   if (colMove == DOWN_JUMP || colMove == UP_JUMP) {
@@ -107,14 +105,15 @@ bool draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
     if (landTeam == NO_TEAM) {
       // 1. But then there is nothing to jump over to get to there
       if (jumpTeam == NO_TEAM) {
-        std::cout << imMsg << "There is nothing you can jump over" << std::endl;
-        return false;
+        invalidMove += "There is nothing you can jump over";
+        throw invalidMove;
       }
       // 2. Player tried to jump over their own piece
       else if (currTeam == jumpTeam){
-        std::cout << imMsg << "You cannot jump over your own piece" << std::endl;
-        return false;
+        invalidMove += "You cannot jump over your own piece";
+        throw invalidMove;
       }
+      // Third case is where piece jumped over is of opponent's = valid, no check
     }
   }
 
@@ -122,16 +121,13 @@ bool draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
   if(landTeam != NO_TEAM) {
     // 1. Piece at spot is their own:
     if(currTeam == landTeam)
-      std::cout << imMsg << "A piece that belongs to you is there" << std::endl;
+      invalidMove += "A piece that belongs to you is there";
     // 2. Piece is of opponent's, to jump over must specify empty spot
-    else {
-      std::cout << imMsg << "Enemy piece is in that spot." << " To jump choose"
-                << " an empty landing cell " << std::endl;
-    }
-    return false;
-  }
+    else
+      invalidMove += "Enemy piece is there. To jump over choose an empty cell";
 
-  return true;
+    throw invalidMove;
+  }
 }
 
 // #################### Validation: Any possible moves left ####################
@@ -218,28 +214,37 @@ bool draughts::model::board::check_all_possible_jumps(team playerTeam, int count
       // Only check possible jumps for pieces that belong to the player
       if(playerTeam == currentTeam) {
         count--;
-        // 1. Piece is present in column 1/2 (0/1 in array) = Check right for jump
-        if(col == FIRST_COL || col == SECOND_COL) {
-          if (check_jump_direction(row, col, RIGHT_JUMP))
-            possibleJump = true;
-        }
-        // 2. Piece is present in column 7/8 (6/7 in array) = Check left for jump
-        else if (col == SECOND_LAST_COL || col == LAST_COL) {
-          if (check_jump_direction(row, col, LEFT_JUMP))
-            possibleJump = true;
-        }
-        // 3. Piece is anywhere else = Check both left and right for jump
-        else {
-          if (check_jump_direction(row, col, RIGHT_JUMP))
-            possibleJump = true;
-          if (check_jump_direction(row, col, LEFT_JUMP))
-            possibleJump = true;
-        }
+        if(check_individual_jump(row, col))
+          possibleJump = true;
       }
       // All of player's pieces have been checked
       if(count == 0)
         return possibleJump;
     }
+  }
+
+  return possibleJump;
+}
+
+bool draughts::model::board::check_individual_jump(int row, int col) {
+  bool possibleJump = false;
+
+  // 1. Piece is present in column 1/2 (0/1 in array) = Check right for jump
+  if(col == FIRST_COL || col == SECOND_COL) {
+    if (check_jump_direction(row, col, RIGHT_JUMP))
+      possibleJump = true;
+  }
+  // 2. Piece is present in column 7/8 (6/7 in array) = Check left for jump
+  else if (col == SECOND_LAST_COL || col == LAST_COL) {
+    if (check_jump_direction(row, col, LEFT_JUMP))
+      possibleJump = true;
+  }
+  // 3. Piece is anywhere else = Check both left and right for jump
+  else {
+    if (check_jump_direction(row, col, RIGHT_JUMP))
+      possibleJump = true;
+    if (check_jump_direction(row, col, LEFT_JUMP))
+      possibleJump = true;
   }
 
   return possibleJump;
@@ -427,6 +432,11 @@ coordinates draughts::model::board::get_coordinates_of_jump(int x1, int y1,
 std::list<moves> draughts::model::board::get_forced_jumps(void)
 {
   return forcedJumps;
+}
+
+void draughts::model::board::reset_jump_list(void)
+{
+  forcedJumps.clear();
 }
 
 int draughts::model::board::get_width(void)

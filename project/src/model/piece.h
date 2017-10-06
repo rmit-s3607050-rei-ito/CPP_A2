@@ -29,7 +29,7 @@ namespace draughts
         virtual type get_type(void) = 0;
         virtual char get_icon(void) = 0;
         // 2. Preset, cannot override
-        bool check_valid_move(int, int, int, int);
+        void check_valid_move(int, int, int, int);
         team get_team(void);
         coordinates get_forward_action(bool, int, int, int);
     };

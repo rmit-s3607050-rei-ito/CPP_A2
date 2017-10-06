@@ -26,8 +26,8 @@ namespace draughts
       public:
         normal(team);
         // Overridden functions
-        type get_type(void);
-        char get_icon(void);
+        virtual type get_type(void) override;
+        virtual char get_icon(void) override;
     };
   }
 }

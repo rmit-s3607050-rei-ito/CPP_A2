@@ -15,6 +15,10 @@
 #include <iostream>
 #include "direction.h"
 
+// Random number generation
+const int MIN = 0;
+const int MAX = 1;
+
 // Piece related constants
 enum team { RED, WHITE, NO_TEAM };
 enum type { NORMAL, KING, EMPTY };
