@@ -21,6 +21,7 @@ type draughts::model::empty::get_type(void)
   return EMPTY;
 }
 
-char draughts::model::empty::get_icon(void) {
+char draughts::model::empty::get_icon(void)
+{
   return EMPTY_PIECE;
 }

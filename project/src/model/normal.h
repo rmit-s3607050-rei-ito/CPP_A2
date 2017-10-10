@@ -13,9 +13,6 @@
 
 // Inheriting from piece
 #include "piece.h"
-// Piece char representation
-const char RED_N_PIECE = 'x';
-const char WHITE_N_PIECE = 'o';
 
 namespace draughts
 {

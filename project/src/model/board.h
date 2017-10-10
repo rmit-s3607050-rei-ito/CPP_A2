@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -28,13 +27,14 @@ namespace draughts
 {
   namespace model
   {
-    class board {
+    class board
+    {
       // 2D array storing cell contents of the board
-      std::unique_ptr<piece> gameBoard[WIDTH][HEIGHT];
+      std::unique_ptr<piece> game_board[WIDTH][HEIGHT];
 
     /* All coords of pieces that are able to jump, reset when rechecking jumps
      * Essentially a list of pairs of coordinates: the piece and where it lands */
-      std::list<moves> forcedJumps;
+      std::list<moves> forced_jumps;
 
       public:
         // Constructor

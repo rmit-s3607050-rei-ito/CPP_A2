@@ -32,10 +32,10 @@ draughts::ncview::ui * draughts::nc_controller::controller::get_view(void)
   return ncview::ui::get_instance();
 }
 
-    draughts::nc_controller::controller*
-draughts::nc_controller::controller::get_instance(void)
+draughts::nc_controller::controller* 
+  draughts::nc_controller::controller::get_instance(void)
 {
-  if(instance == nullptr){
+  if(instance == nullptr) {
     instance = std::unique_ptr<controller>(new controller);
   }
   return instance.get();
@@ -62,24 +62,19 @@ void draughts::nc_controller::controller::start_game(
   std::vector<int> ids;
   using player = std::pair<int, std::string>;
   player player1, player2;
-  std::pair<player, player> theplayers;
+  std::pair<player, player> thePlayers;
   int count = 0;
-  for(auto & pair : players)
-  {
+  for(auto & pair : players) {
     count++;
     ids.push_back(pair.first);
     if(count == 1)
-    {
       player1 = pair;
-    }
     else
-    {
       player2 = pair;
-    }
   }
-  theplayers = std::make_pair(player1, player2);
+  thePlayers = std::make_pair(player1, player2);
   get_model()->start_game(ids[0], ids[1]);
-  get_view()->show_game_window(theplayers);
+  get_view()->show_game_window(thePlayers);
 }
 
 draughts::nc_controller::controller::~controller(void)

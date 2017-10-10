@@ -12,9 +12,9 @@
 
 #include <memory>
 #include <vector>
-#include "command.h"
 #include <chrono>
 #include <thread>
+#include "command.h"
 
 #pragma once
 
@@ -34,7 +34,7 @@ namespace draughts
 
     class controller
     {
-      static std::unique_ptr<controller>instance;
+      static std::unique_ptr<controller> instance;
 
       model::model * get_model(void);
       ncview::ui * get_view(void);

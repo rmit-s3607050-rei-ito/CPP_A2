@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -31,8 +30,8 @@ namespace draughts
   {
     class ui
     {
-      draughts::nc_controller::controller * thecontroller;
-      draughts::model::model * themodel;
+      draughts::nc_controller::controller * the_controller;
+      draughts::model::model * the_model;
       ui(void);
       static std::unique_ptr<ui> instance;
       public:

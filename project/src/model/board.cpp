@@ -25,30 +25,31 @@ void draughts::model::board::init_board()
       // Fill gaps between pieces with empty spaces
       if(((col + row) % 2) == 0) {
         std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
-        gameBoard[row][col] = std::move(emptyCell);
+        game_board[row][col] = std::move(emptyCell);
       } else {
         // Initialize middle rows (3 and 4) as empty
         if (row > X_END && row < O_START) {
           std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
-          gameBoard[row][col] = std::move(emptyCell);
+          game_board[row][col] = std::move(emptyCell);
         } // Initialize red 'x' pieces
         else if (row <= X_END) {
           std::unique_ptr<piece> redPiece = std::make_unique<normal>(RED);
-          gameBoard[row][col] = std::move(redPiece);
+          game_board[row][col] = std::move(redPiece);
         // Initialize white 'o' pieces
         } else {
           std::unique_ptr<piece> whitePiece = std::make_unique<normal>(WHITE);
-          gameBoard[row][col] = std::move(whitePiece);
+          game_board[row][col] = std::move(whitePiece);
         }
       }
     }
   }
 }
 
-void draughts::model::board::check_valid_selection(team playerTeam, int x, int y)
+void draughts::model::board::check_valid_selection(team player_team, int x,
+  int y)
 {
-  team selectedTeam = gameBoard[x][y]->get_team(); // team of selected piece
-  std::string invalidSelection = isMsg;
+  team selectedTeam = game_board[x][y]->get_team(); // team of selected piece
+  std::string invalidSelection = IS_MSG;
 
   // 1. Tried to select an empty cell
   if(selectedTeam == NO_TEAM) {
@@ -56,7 +57,7 @@ void draughts::model::board::check_valid_selection(team playerTeam, int x, int y
     throw invalidSelection;
   }
   // 2. Selected a piece that does not belong to them
-  else if (playerTeam != selectedTeam) {
+  else if (player_team != selectedTeam) {
     invalidSelection += "This piece does not belong to you";
     throw invalidSelection;
   }
@@ -64,14 +65,14 @@ void draughts::model::board::check_valid_selection(team playerTeam, int x, int y
 
 void draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
 {
-  piece *currentPiece = gameBoard[x1][y1].get();   // Piece selected
-  type currType = gameBoard[x1][y1]->get_type();   // Type of piece selected
-  team currTeam = gameBoard[x1][y1]->get_team();   // Team selected to jump
-  team landTeam = gameBoard[x2][y2]->get_team();   // Landing spot
-  team jumpTeam;                                   // What was jumped over
+  piece *currentPiece = game_board[x1][y1].get();   // Piece selected
+  type currType = game_board[x1][y1]->get_type();   // Type of piece selected
+  team currTeam = game_board[x1][y1]->get_team();   // Team selected to jump
+  team landTeam = game_board[x2][y2]->get_team();   // Landing spot
+  team jumpTeam;                                    // What was jumped over
 
   // String to throw as an exception
-  std::string invalidMove = imMsg;
+  std::string invalidMove = IM_MSG;
 
   // Coords of cell jumped over
   std::pair<int,int> jumpCoords;
@@ -99,7 +100,7 @@ void draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
   if (colMove == DOWN_JUMP || colMove == UP_JUMP) {
     // Get type of cell 1 position before jump (based on moving rowMove/colMove)
     jumpCoords = get_coordinates_of_jump(x1, y1, x2, y2);
-    jumpTeam = gameBoard[jumpCoords.first][jumpCoords.second]->get_team();
+    jumpTeam = game_board[jumpCoords.first][jumpCoords.second]->get_team();
 
     // Landing spot has no piece in it
     if (landTeam == NO_TEAM) {
@@ -140,7 +141,7 @@ bool draughts::model::board::check_all_possible_moves(int xPieces, int oPieces)
   for(int row = 0; row < WIDTH; row++) {
     for(int col = 0; col < HEIGHT; col++) {
       // Store current type of piece being iterated upon
-      currentType = gameBoard[row][col]->get_type();
+      currentType = game_board[row][col]->get_type();
       // Only check possible moves for non-empty cells
       if(currentType != EMPTY) {
         totalPieces--;
@@ -171,18 +172,19 @@ bool draughts::model::board::check_all_possible_moves(int xPieces, int oPieces)
   return false;
 }
 
-bool draughts::model::board::check_move_direction(int row, int col, int direction)
+bool draughts::model::board::check_move_direction(int row, int col,
+  int direction)
 {
-  piece *currentPiece = gameBoard[row][col].get();  // Piece being checked
+  piece *currentPiece = game_board[row][col].get(); // Piece being checked
   coordinates forward; // Coordinates of landing spot after move
-  coordinates back;    // Also for landing spot, for king pieces only
-  type currentType = gameBoard[row][col]->get_type();  // Type of piece to move
+  coordinates back; // Also for landing spot, for king pieces only
+  type currentType = game_board[row][col]->get_type(); // Type of piece to move
 
   // Obtain a forward move for the piece (1 cell move) based on the direction
   forward = currentPiece->get_forward_action(false, row, col, direction);
 
   // When direction in move is empty, there is a possible move
-  if (gameBoard[forward.first][forward.second]->get_type() == EMPTY)
+  if (game_board[forward.first][forward.second]->get_type() == EMPTY)
     return true;
   // For the king pieces also need to check backwards movement
   else if (currentType == KING) {
@@ -190,7 +192,7 @@ bool draughts::model::board::check_move_direction(int row, int col, int directio
     king *kingPiece = dynamic_cast<king*>(currentPiece);
     back = kingPiece->get_backward_action(false, row, col, direction);
 
-    if(gameBoard[back.first][back.second]->get_type() == EMPTY)
+    if(game_board[back.first][back.second]->get_type() == EMPTY)
       return true;
   }
 
@@ -198,21 +200,22 @@ bool draughts::model::board::check_move_direction(int row, int col, int directio
 }
 
 // #################### Jumping validation ####################
-bool draughts::model::board::check_all_possible_jumps(team playerTeam, int count)
+bool draughts::model::board::check_all_possible_jumps(team player_team,
+  int count)
 {
   bool possibleJump = false;
   team currentTeam;
 
   // Reset all previous checked jumps made beforehand
-  forcedJumps.clear();
+  forced_jumps.clear();
 
   // Loop through entire board to check whether a jump could be made
   for(int row = 0; row < WIDTH; row++) {
     for(int col = 0; col < HEIGHT; col++) {
       // Store team of piece being iterated upon
-      currentTeam = gameBoard[row][col]->get_team();
+      currentTeam = game_board[row][col]->get_team();
       // Only check possible jumps for pieces that belong to the player
-      if(playerTeam == currentTeam) {
+      if(player_team == currentTeam) {
         count--;
         if(check_individual_jump(row, col))
           possibleJump = true;
@@ -226,7 +229,8 @@ bool draughts::model::board::check_all_possible_jumps(team playerTeam, int count
   return possibleJump;
 }
 
-bool draughts::model::board::check_individual_jump(int row, int col) {
+bool draughts::model::board::check_individual_jump(int row, int col)
+{
   bool possibleJump = false;
 
   // 1. Piece is present in column 1/2 (0/1 in array) = Check right for jump
@@ -253,8 +257,8 @@ bool draughts::model::board::check_individual_jump(int row, int col) {
 bool draughts::model::board::check_jump_direction(int x, int y, int direction)
 {
   // Mostly same as check_move_direction(), some extra comments/additions made.
-  piece *currentPiece = gameBoard[x][y].get();
-  type currentType = gameBoard[x][y]->get_type();
+  piece *currentPiece = game_board[x][y].get();
+  type currentType = game_board[x][y]->get_type();
   coordinates forward, back;
 
   /* Check if jump land spot results in being out of bounds
@@ -273,7 +277,7 @@ bool draughts::model::board::check_jump_direction(int x, int y, int direction)
   // When jump results in not being out of bounds check cell 2 spaces ahead
   if (!forwardOutOfBounds) {
     // When cell in 2 spaces ahead is empty check if piece can jump
-    if (gameBoard[forward.first][forward.second]->get_type() == EMPTY) {
+    if (game_board[forward.first][forward.second]->get_type() == EMPTY) {
       if (can_jump(x, y, forward.first, forward.second))
         return true;
     }
@@ -289,7 +293,7 @@ bool draughts::model::board::check_jump_direction(int x, int y, int direction)
 
     // Same bounds checking as forwards
     if (!backwardsOutOfBounds) {
-      if(gameBoard[back.first][back.second]->get_type() == EMPTY) {
+      if(game_board[back.first][back.second]->get_type() == EMPTY) {
         if (can_jump(x, y, back.first, back.second))
           return true;
       }
@@ -308,8 +312,8 @@ bool draughts::model::board::can_jump(int x1, int y1, int x2, int y2)
 
   // Get type of piece to jump and of piece that is going to be jumped over
   coords = get_coordinates_of_jump(x1, y1, x2, y2);
-  currentTeam = gameBoard[x1][y1]->get_team();
-  jumpedOverTeam = gameBoard[coords.first][coords.second]->get_team();
+  currentTeam = game_board[x1][y1]->get_team();
+  jumpedOverTeam = game_board[coords.first][coords.second]->get_team();
 
   // Check if jumped over piece's team is not the same as current player's
   if (jumpedOverTeam != NO_TEAM && currentTeam != jumpedOverTeam) {
@@ -320,7 +324,7 @@ bool draughts::model::board::can_jump(int x1, int y1, int x2, int y2)
     start = std::make_pair(x1,y1);
     end = std::make_pair(x2,y2);
     // Add it to the list of forced jumps the player has to make
-    forcedJumps.push_back(std::make_pair(start, end));
+    forced_jumps.push_back(std::make_pair(start, end));
 
     return true;
   }
@@ -332,8 +336,8 @@ bool draughts::model::board::can_jump(int x1, int y1, int x2, int y2)
 bool draughts::model::board::move_piece(int x1, int y1, int x2, int y2)
 {
   // Moved piece parameters
-  type movedType = gameBoard[x1][y1]->get_type();
-  team movedTeam = gameBoard[x1][y1]->get_team();
+  type movedType = game_board[x1][y1]->get_type();
+  team movedTeam = game_board[x1][y1]->get_team();
   // Create new piece that is a duplicate to the old to move to the new location
   std::unique_ptr<piece> movedPiece;
   if (movedType == NORMAL)
@@ -344,8 +348,8 @@ bool draughts::model::board::move_piece(int x1, int y1, int x2, int y2)
   // Empty cell to allocate to cell where piece moved from
   std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
 
-  coordinates coords;           // Coordinates of cell to remove if jumped over
-  bool scoreUpdate = false;     // Flag to tell model if score is to be updated
+  coordinates coords; // Coordinates of cell to remove if jumped over
+  bool scoreUpdate = false; // Flag to tell model if score is to be updated
 
   int colMove = y2 - y1;
 
@@ -357,15 +361,15 @@ bool draughts::model::board::move_piece(int x1, int y1, int x2, int y2)
     // Get coordinates of piece that is jumped over
     coords = get_coordinates_of_jump(x1, y1, x2, y2);
     // Set it to empty
-    gameBoard[coords.first][coords.second] = std::move(emptyJumpCell);
+    game_board[coords.first][coords.second] = std::move(emptyJumpCell);
     // Increase score of current player by 1
     scoreUpdate = true;
   }
 
   // Set new cell contents to contain the piece moved
-  gameBoard[x2][y2] = std::move(movedPiece);
+  game_board[x2][y2] = std::move(movedPiece);
   // Set original cell where piece moved from to be empty
-  gameBoard[x1][y1] = std::move(emptyCell);
+  game_board[x1][y1] = std::move(emptyCell);
   // Return score update (0 if no jump has been made, +1 if so)
   return scoreUpdate;
 }
@@ -373,18 +377,18 @@ bool draughts::model::board::move_piece(int x1, int y1, int x2, int y2)
 bool draughts::model::board::promote_piece(int x, int y)
 {
   // Return 1 if piece has been promoted (+1 score), or 0 when no promotion
-  type pieceType = gameBoard[x][y]->get_type();
-  team pieceTeam;
+  type pieceType = game_board[x][y]->get_type();
+  team piece_team;
   std::unique_ptr<piece> kingPiece;
 
   // Only able to promote normal 'o' and normal 'x' pieces
   if(pieceType == NORMAL) {
     // Get the team the piece belongs to
-    pieceTeam = gameBoard[x][y]->get_team();
+    piece_team = game_board[x][y]->get_team();
     // Create a king piece with same team
-    kingPiece = std::make_unique<king>(pieceTeam);
+    kingPiece = std::make_unique<king>(piece_team);
     // Place the king piece on the board
-    gameBoard[x][y] = std::move(kingPiece);
+    game_board[x][y] = std::move(kingPiece);
 
     return true;
   }
@@ -395,11 +399,11 @@ bool draughts::model::board::promote_piece(int x, int y)
 // #################### Getters and Setters ####################
 char draughts::model::board::get_piece(int x, int y)
 {
-  return gameBoard[x][y]->get_icon();
+  return game_board[x][y]->get_icon();
 }
 
 coordinates draughts::model::board::get_coordinates_of_jump(int x1, int y1,
-                                                            int x2, int y2)
+  int x2, int y2)
 {
   // Calculate coordinates of cell being jumped over, jump factor added later
   coordinates coords;
@@ -431,12 +435,12 @@ coordinates draughts::model::board::get_coordinates_of_jump(int x1, int y1,
 
 std::list<moves> draughts::model::board::get_forced_jumps(void)
 {
-  return forcedJumps;
+  return forced_jumps;
 }
 
 void draughts::model::board::reset_jump_list(void)
 {
-  forcedJumps.clear();
+  forced_jumps.clear();
 }
 
 int draughts::model::board::get_width(void)
