@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -78,8 +77,7 @@ namespace draughts
         {
           const std::map<int, std::string>::const_iterator needle
             = players_ref.find(index);
-          if(needle == players_ref.cend())
-          {
+          if(needle == players_ref.cend()) {
             throw std::invalid_argument("could not find the "
               "selected player.");
           }

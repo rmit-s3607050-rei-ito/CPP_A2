@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -13,42 +12,50 @@
 #include "player.h"
 
 // Constructor
-draughts::model::player::player(team t) : playerTeam(t)
+draughts::model::player::player(team t) : player_team(t)
 {
 }
 
 // Blank slate starting parameters for player
-void draughts::model::player::initialize(void){
-  playerScore = 0;
-  numPieces = NUM_STARTING_PIECES;
+void draughts::model::player::initialize(void)
+{
+  player_score = 0;
+  num_pieces = NUM_STARTING_PIECES;
 }
 
 // #################### Getters and Setters ####################
-int draughts::model::player::get_id(void) {
-  return playerID;
+int draughts::model::player::get_id(void)
+{
+  return player_id;
 }
 
-int draughts::model::player::get_num_pieces(void) {
-  return numPieces;
+int draughts::model::player::get_num_pieces(void)
+{
+  return num_pieces;
 }
 
-int draughts::model::player::get_score(void) {
-  return playerScore;
+int draughts::model::player::get_score(void)
+{
+  return player_score;
 }
 
-team draughts::model::player::get_team(void){
-  return playerTeam;
+team draughts::model::player::get_team(void)
+{
+  return player_team;
 }
 
-void draughts::model::player::set_id(int pID) {
-  playerID = pID;
+void draughts::model::player::set_id(int pID)
+{
+  player_id = pID;
 }
 
 // #################### Incremental change ####################
-void draughts::model::player::reduce_piece_count(void) {
-  numPieces--;
+void draughts::model::player::reduce_piece_count(void)
+{
+  num_pieces--;
 }
 
-void draughts::model::player::increment_score(void) {
-  playerScore++;
+void draughts::model::player::increment_score(void)
+{
+  player_score++;
 }

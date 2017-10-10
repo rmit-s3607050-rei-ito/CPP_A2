@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -27,10 +26,10 @@ namespace draughts
   {
     class player
     {
-      int playerID;
-      int playerScore;
-      int numPieces;
-      team playerTeam;
+      int player_id;
+      int player_score;
+      int num_pieces;
+      team player_team;
 
       public:
         // Constructor and initialization

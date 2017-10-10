@@ -21,10 +21,11 @@ type draughts::model::normal::get_type(void)
   return NORMAL;
 }
 
-char draughts::model::normal::get_icon(void) {
+char draughts::model::normal::get_icon(void)
+{
   char icon = ' ';
 
-  if(pieceTeam == RED)
+  if(piece_team == RED)
     icon = RED_N_PIECE;
   else
     icon = WHITE_N_PIECE;

@@ -13,8 +13,6 @@
 
 // Inheriting from piece
 #include "piece.h"
-// Piece char representation
-const char EMPTY_PIECE = ' ';
 
 namespace draughts
 {

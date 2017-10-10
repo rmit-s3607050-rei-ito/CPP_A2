@@ -13,6 +13,13 @@
 
 #include "util.h"
 
+// Piece char representation
+const char EMPTY_PIECE = ' ';
+const char RED_N_PIECE = 'x';
+const char WHITE_N_PIECE = 'o';
+const char RED_K_PIECE = 'X';
+const char WHITE_K_PIECE = 'O';
+
 namespace draughts
 {
   namespace model
@@ -20,7 +27,7 @@ namespace draughts
     class piece
     {
       protected:
-        team pieceTeam;
+        team piece_team;
 
       public:
         // Constructor

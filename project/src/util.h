@@ -57,6 +57,6 @@ const int RIGHT_JUMP = 2;
 const int LEFT_JUMP = -2;
 
 // Pre-appended string for invalid moves and invalid selections and possible jumps
-const std::string isMsg = "Invalid Selection: ";
-const std::string imMsg = "Invalid Move: ";
-const std::string jumpMsg = "Token at: ";
+const std::string IS_MSG = "Invalid Selection: ";
+const std::string IM_MSG = "Invalid Move: ";
+const std::string JUMP_MSG = "Token at: ";

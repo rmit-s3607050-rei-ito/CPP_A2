@@ -12,7 +12,7 @@
 #include "piece.h"
 
 // Constructor
-draughts::model::piece::piece(team t) : pieceTeam(t)
+draughts::model::piece::piece(team t) : piece_team(t)
 {
 }
 
@@ -24,7 +24,7 @@ void draughts::model::piece::check_valid_move(int x1, int y1, int x2, int y2)
   int colMove = y2 - y1;
 
   // String to hold exception message to throw
-  std::string invalidMove = imMsg;
+  std::string invalidMove = IM_MSG;
 
   // 1. Player tried to move forward or left/right
   if(rowMove == 0 || colMove == 0) {
@@ -40,7 +40,7 @@ void draughts::model::piece::check_valid_move(int x1, int y1, int x2, int y2)
   }
 
   // 3. Player entered a move with a difference > 2
-  if (colMove > DOWN_JUMP || colMove < UP_JUMP){
+  if (colMove > DOWN_JUMP || colMove < UP_JUMP) {
     invalidMove += "You cannot move more than 2 spaces";
     throw invalidMove;
   }
@@ -48,11 +48,11 @@ void draughts::model::piece::check_valid_move(int x1, int y1, int x2, int y2)
 
 team draughts::model::piece::get_team(void)
 {
-  return pieceTeam;
+  return piece_team;
 }
 
 coordinates draughts::model::piece::get_forward_action(bool jump, int x, int y,
-                                                       int direction)
+  int direction)
 {
   // Coordinates of landing spot after a move
   int forwardX, forwardY;
@@ -62,7 +62,7 @@ coordinates draughts::model::piece::get_forward_action(bool jump, int x, int y,
 
   // Moving by row will vary whether going up or down, toggle between jump and move
   // 1. Red 'x' type pieces, forward = down + direction, backwards = reverse
-  if(pieceTeam == RED) {
+  if(piece_team == RED) {
     if(jump)
       movement = DOWN_JUMP;
     else

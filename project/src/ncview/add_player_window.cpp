@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -22,11 +21,12 @@ void draughts::ncview::add_player_window::activate(void)
   std::string proceed;
   bool success = false;
 
-  while(!success){
+  while(!success) {
     try {
       name = window::get_input("Please enter the name for the new player");
-      draughts::model::model * themodel = draughts::model::model::get_instance();
-      themodel->add_player(name);
+      draughts::model::model * the_model =
+        draughts::model::model::get_instance();
+      the_model->add_player(name);
       success = true; // When adding player done, and no exception thrown proceed
     }
     // Catch exception that is thrown when new player could not be added
@@ -39,7 +39,9 @@ void draughts::ncview::add_player_window::activate(void)
       return;
     }
   }
-  std::cout << "Successfully added " << name << " to player roster." << std::endl;
+
+  std::cout << "Successfully added " << name << " to player roster."
+    << std::endl;
   std::cout << "Press <enter> to continue: " << std::endl;
   std::getline(std::cin, proceed); // Stored, ensure doesn't carry over to menu
   view->main_menu();

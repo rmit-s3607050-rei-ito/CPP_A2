@@ -21,10 +21,11 @@ type draughts::model::king::get_type(void)
   return KING;
 }
 
-char draughts::model::king::get_icon(void) {
+char draughts::model::king::get_icon(void)
+{
   char icon = ' ';
 
-  if(pieceTeam == RED)
+  if(piece_team == RED)
     icon = RED_K_PIECE;
   else
     icon = WHITE_K_PIECE;
@@ -33,16 +34,18 @@ char draughts::model::king::get_icon(void) {
 }
 
 coordinates draughts::model::king::get_backward_action(bool jump, int x, int y,
-                                                       int direction) {
+  int direction)
+{
   // Essentially the reverse of a forward action, see piece.cpp for commenting
   int forwardX, forwardY;
   int movement;
-  if(pieceTeam == RED) {
+  if(piece_team == RED) {
     if(jump)
       movement = UP_JUMP;
     else
       movement = UP;
-  } else {
+  }
+  else {
     if(jump)
       movement = DOWN_JUMP;
     else

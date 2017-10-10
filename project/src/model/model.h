@@ -1,4 +1,3 @@
-
 /* COSC1254 - Programming using C++ - Assignment 2
  * Assignment done as a pair
  * -----------------------------------------------------------------------------
@@ -41,16 +40,16 @@ namespace draughts
     {
       // Game parameters
       private:
-        player *currentPlayer;  // Which player is taking their turn
+        player *current_player;  // Which player is taking their turn
         player red;             // player using red 'x' pieces
         player white;           // player using white 'o' pieces
 
         // Array representing the game board and the pieces placed upon it
-        board gameBoard;
+        board game_board;
         // Map of players, datastructure map is used due to get_player_list() type
-        std::map<int, std::string> playerList;
+        std::map<int, std::string> player_list;
         // Number of players registered to the system. Allocates ID based on count
-        int playerCount;
+        int player_count;
 
         static std::unique_ptr<model> instance;
         model(void);                            // Constructor
