@@ -44,8 +44,8 @@ void draughts::ncview::game_window::activate(void)
                             move.second.first, move.second.second);
 
         // Store details of the piece selected to jump
-        chosen.first = move.second.first - ARRAY_DIFF;
-        chosen.second = move.second.second - ARRAY_DIFF;
+        chosen.first = move.second.first;
+        chosen.second = move.second.second;
 
         print_turn_info();
 
@@ -56,8 +56,8 @@ void draughts::ncview::game_window::activate(void)
           themodel->make_move(move.first.first, move.first.second,
                               move.second.first, move.second.second);
 
-          chosen.first = move.second.first - ARRAY_DIFF;
-          chosen.second = move.second.second - ARRAY_DIFF;
+          chosen.first = move.second.first;
+          chosen.second = move.second.second;
 
           // Show updated board
           print_turn_info();
