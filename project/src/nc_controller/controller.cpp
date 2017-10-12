@@ -8,6 +8,7 @@
  * Name             : Pacific Thai
  * Student Number   : s3429648
  * -----------------------------------------------------------------------------
+ * Using skeleton code provided by Paul Miller
  */
 
 #include "controller.h"
@@ -32,7 +33,7 @@ draughts::ncview::ui * draughts::nc_controller::controller::get_view(void)
   return ncview::ui::get_instance();
 }
 
-draughts::nc_controller::controller* 
+draughts::nc_controller::controller*
   draughts::nc_controller::controller::get_instance(void)
 {
   if(instance == nullptr) {

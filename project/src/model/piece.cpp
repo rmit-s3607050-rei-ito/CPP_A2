@@ -27,7 +27,7 @@ void draughts::model::piece::check_valid_move(int x1, int y1, int x2, int y2)
   std::string invalidMove = IM_MSG;
 
   // 1. Player tried to move forward or left/right
-  if(rowMove == 0 || colMove == 0) {
+  if (rowMove == 0 || colMove == 0) {
     invalidMove += "You can only move diagonally";
     throw invalidMove;
   }
@@ -62,14 +62,15 @@ coordinates draughts::model::piece::get_forward_action(bool jump, int x, int y,
 
   // Moving by row will vary whether going up or down, toggle between jump and move
   // 1. Red 'x' type pieces, forward = down + direction, backwards = reverse
-  if(piece_team == RED) {
-    if(jump)
+  if (piece_team == RED) {
+    if (jump)
       movement = DOWN_JUMP;
     else
       movement = DOWN;
-  // 2. White 'o' type pieces, forward = up + direction, backwards = reverse
-  } else {
-    if(jump)
+  }
+  else {
+    // 2. White 'o' type pieces, forward = up + direction, backwards = reverse
+    if (jump)
       movement = UP_JUMP;
     else
       movement = UP;

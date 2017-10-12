@@ -26,17 +26,18 @@ void draughts::model::board::init_board()
       if(((col + row) % 2) == 0) {
         std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
         game_board[row][col] = std::move(emptyCell);
-      } else {
+      }
+      else {
         // Initialize middle rows (3 and 4) as empty
         if (row > X_END && row < O_START) {
           std::unique_ptr<piece> emptyCell = std::make_unique<empty>(NO_TEAM);
           game_board[row][col] = std::move(emptyCell);
-        } // Initialize red 'x' pieces
-        else if (row <= X_END) {
+        }
+        else if (row <= X_END) { // Initialize red 'x' pieces
           std::unique_ptr<piece> redPiece = std::make_unique<normal>(RED);
           game_board[row][col] = std::move(redPiece);
-        // Initialize white 'o' pieces
-        } else {
+        }
+        else { // Initialize white 'o' pieces
           std::unique_ptr<piece> whitePiece = std::make_unique<normal>(WHITE);
           game_board[row][col] = std::move(whitePiece);
         }
@@ -45,8 +46,8 @@ void draughts::model::board::init_board()
   }
 }
 
-void draughts::model::board::check_valid_selection(team player_team, int x,
-  int y)
+void draughts::model::board::check_valid_selection(team player_team,
+  int x, int y)
 {
   team selectedTeam = game_board[x][y]->get_team(); // team of selected piece
   std::string invalidSelection = IS_MSG;
@@ -56,8 +57,8 @@ void draughts::model::board::check_valid_selection(team player_team, int x,
     invalidSelection += "No piece to move at this cell";
     throw invalidSelection;
   }
-  // 2. Selected a piece that does not belong to them
   else if (player_team != selectedTeam) {
+    // 2. Selected a piece that does not belong to them
     invalidSelection += "This piece does not belong to you";
     throw invalidSelection;
   }
@@ -65,7 +66,7 @@ void draughts::model::board::check_valid_selection(team player_team, int x,
 
 void draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
 {
-  piece *currentPiece = game_board[x1][y1].get();   // Piece selected
+  piece *currPiece = game_board[x1][y1].get();   // Piece selected
   type currType = game_board[x1][y1]->get_type();   // Type of piece selected
   team currTeam = game_board[x1][y1]->get_team();   // Team selected to jump
   team landTeam = game_board[x2][y2]->get_team();   // Landing spot
@@ -94,7 +95,7 @@ void draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
   }
 
   // B. Check all other movement types with the piece itself
-  currentPiece->check_valid_move(x1, y1, x2, y2);
+  currPiece->check_valid_move(x1, y1, x2, y2);
 
   // C. Perform board checks comparing if a jump was to be made
   if (colMove == DOWN_JUMP || colMove == UP_JUMP) {
@@ -109,8 +110,8 @@ void draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
         invalidMove += "There is nothing you can jump over";
         throw invalidMove;
       }
-      // 2. Player tried to jump over their own piece
       else if (currTeam == jumpTeam){
+        // 2. Player tried to jump over their own piece
         invalidMove += "You cannot jump over your own piece";
         throw invalidMove;
       }
@@ -119,12 +120,12 @@ void draughts::model::board::check_valid_move(int x1, int y1, int x2, int y2)
   }
 
   // D. Landing spot has a piece in it (for moving and jumps)
-  if(landTeam != NO_TEAM) {
+  if (landTeam != NO_TEAM) {
     // 1. Piece at spot is their own:
-    if(currTeam == landTeam)
+    if (currTeam == landTeam)
       invalidMove += "A piece that belongs to you is there";
-    // 2. Piece is of opponent's, to jump over must specify empty spot
     else
+      // 2. Piece is of opponent's, to jump over must specify empty spot
       invalidMove += "Enemy piece is there. To jump over choose an empty cell";
 
     throw invalidMove;
@@ -138,28 +139,26 @@ bool draughts::model::board::check_all_possible_moves(int xPieces, int oPieces)
   int totalPieces = xPieces + oPieces;
 
   // Loop through entire board to check whether a move could be made
-  for(int row = 0; row < WIDTH; row++) {
-    for(int col = 0; col < HEIGHT; col++) {
+  for (int row = 0; row < WIDTH; row++) {
+    for (int col = 0; col < HEIGHT; col++) {
       // Store current type of piece being iterated upon
       currentType = game_board[row][col]->get_type();
       // Only check possible moves for non-empty cells
-      if(currentType != EMPTY) {
+      if (currentType != EMPTY) {
         totalPieces--;
         // Pieces in Column 0 can only move right
-        if(col == FIRST_COL) {
-          if(check_move_direction(row, col, RIGHT))
+        if (col == FIRST_COL) {
+          if (check_move_direction(row, col, RIGHT))
             return true;
         }
-        // Pieces in Column 8 can only move left
-        else if(col == LAST_COL) {
-          if(check_move_direction(row, col, LEFT))
+        else if (col == LAST_COL) { // Pieces in Column 8 can only move left
+          if (check_move_direction(row, col, LEFT))
             return true;
         }
-        // Check both directions for the rest of the pieces
-        else {
-          if(check_move_direction(row, col, LEFT))
+        else { // Check both directions for the rest of the pieces
+          if (check_move_direction(row, col, LEFT))
             return true;
-          if(check_move_direction(row, col, RIGHT))
+          if (check_move_direction(row, col, RIGHT))
             return true;
         }
       }
@@ -186,13 +185,12 @@ bool draughts::model::board::check_move_direction(int row, int col,
   // When direction in move is empty, there is a possible move
   if (game_board[forward.first][forward.second]->get_type() == EMPTY)
     return true;
-  // For the king pieces also need to check backwards movement
-  else if (currentType == KING) {
+  else if (currentType == KING) { // For the king pieces also need to check backwards movement
     // Cast the currentPiece to a king piece and check its backward move
     king *kingPiece = dynamic_cast<king*>(currentPiece);
     back = kingPiece->get_backward_action(false, row, col, direction);
 
-    if(game_board[back.first][back.second]->get_type() == EMPTY)
+    if (game_board[back.first][back.second]->get_type() == EMPTY)
       return true;
   }
 
@@ -210,18 +208,18 @@ bool draughts::model::board::check_all_possible_jumps(team player_team,
   forced_jumps.clear();
 
   // Loop through entire board to check whether a jump could be made
-  for(int row = 0; row < WIDTH; row++) {
-    for(int col = 0; col < HEIGHT; col++) {
+  for (int row = 0; row < WIDTH; row++) {
+    for (int col = 0; col < HEIGHT; col++) {
       // Store team of piece being iterated upon
       currentTeam = game_board[row][col]->get_team();
       // Only check possible jumps for pieces that belong to the player
-      if(player_team == currentTeam) {
+      if (player_team == currentTeam) {
         count--;
-        if(check_individual_jump(row, col))
+        if (check_individual_jump(row, col))
           possibleJump = true;
       }
       // All of player's pieces have been checked
-      if(count == 0)
+      if (count == 0)
         return possibleJump;
     }
   }
@@ -234,17 +232,17 @@ bool draughts::model::board::check_individual_jump(int row, int col)
   bool possibleJump = false;
 
   // 1. Piece is present in column 1/2 (0/1 in array) = Check right for jump
-  if(col == FIRST_COL || col == SECOND_COL) {
+  if (col == FIRST_COL || col == SECOND_COL) {
     if (check_jump_direction(row, col, RIGHT_JUMP))
       possibleJump = true;
   }
-  // 2. Piece is present in column 7/8 (6/7 in array) = Check left for jump
   else if (col == SECOND_LAST_COL || col == LAST_COL) {
+    // 2. Piece is present in column 7/8 (6/7 in array) = Check left for jump
     if (check_jump_direction(row, col, LEFT_JUMP))
       possibleJump = true;
   }
-  // 3. Piece is anywhere else = Check both left and right for jump
   else {
+    // 3. Piece is anywhere else = Check both left and right for jump
     if (check_jump_direction(row, col, RIGHT_JUMP))
       possibleJump = true;
     if (check_jump_direction(row, col, LEFT_JUMP))
@@ -271,7 +269,7 @@ bool draughts::model::board::check_jump_direction(int x, int y, int direction)
   forward = currentPiece->get_forward_action(true, x, y, direction);
 
   // Check if forward jump ends up with piece being out of bounds
-  if(forward.first > O_END || forward.first < X_START)
+  if (forward.first > O_END || forward.first < X_START)
     forwardOutOfBounds = true;
 
   // When jump results in not being out of bounds check cell 2 spaces ahead
@@ -288,12 +286,12 @@ bool draughts::model::board::check_jump_direction(int x, int y, int direction)
     back = kingPiece->get_backward_action(true, x, y, direction);
 
     // Check if backward jump ends up with piece being out of bounds
-    if(back.first > O_END || back.first < X_START)
+    if (back.first > O_END || back.first < X_START)
       backwardsOutOfBounds = true;
 
     // Same bounds checking as forwards
     if (!backwardsOutOfBounds) {
-      if(game_board[back.first][back.second]->get_type() == EMPTY) {
+      if (game_board[back.first][back.second]->get_type() == EMPTY) {
         if (can_jump(x, y, back.first, back.second))
           return true;
       }
@@ -382,7 +380,7 @@ bool draughts::model::board::promote_piece(int x, int y)
   std::unique_ptr<piece> kingPiece;
 
   // Only able to promote normal 'o' and normal 'x' pieces
-  if(pieceType == NORMAL) {
+  if (pieceType == NORMAL) {
     // Get the team the piece belongs to
     piece_team = game_board[x][y]->get_team();
     // Create a king piece with same team
@@ -419,15 +417,15 @@ coordinates draughts::model::board::get_coordinates_of_jump(int x1, int y1,
   * rowMove = -ive and colMove = -ive: jumpX and jumpY - jump
   * rowMove = +ive and colMove = +ive: jumpX and jumpY + jump */
 
- if(rowMove < 0)
-   jumpX -= JUMP;
- else
-   jumpX += JUMP;
+  if (rowMove < 0)
+    jumpX -= JUMP;
+  else
+    jumpX += JUMP;
 
- if(colMove < 0)
-   jumpY -= JUMP;
- else
-   jumpY += JUMP;
+  if (colMove < 0)
+    jumpY -= JUMP;
+  else
+    jumpY += JUMP;
 
   coords = std::make_pair(jumpX, jumpY);
   return coords;

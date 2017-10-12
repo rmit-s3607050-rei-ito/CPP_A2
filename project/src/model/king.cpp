@@ -25,7 +25,7 @@ char draughts::model::king::get_icon(void)
 {
   char icon = ' ';
 
-  if(piece_team == RED)
+  if (piece_team == RED)
     icon = RED_K_PIECE;
   else
     icon = WHITE_K_PIECE;
@@ -39,14 +39,14 @@ coordinates draughts::model::king::get_backward_action(bool jump, int x, int y,
   // Essentially the reverse of a forward action, see piece.cpp for commenting
   int forwardX, forwardY;
   int movement;
-  if(piece_team == RED) {
-    if(jump)
+  if (piece_team == RED) {
+    if (jump)
       movement = UP_JUMP;
     else
       movement = UP;
   }
   else {
-    if(jump)
+    if (jump)
       movement = DOWN_JUMP;
     else
       movement = DOWN;

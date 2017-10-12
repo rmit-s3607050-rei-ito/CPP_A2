@@ -8,6 +8,7 @@
  * Name             : Pacific Thai
  * Student Number   : s3429648
  * -----------------------------------------------------------------------------
+ * Using skeleton code provided by Paul Miller
  */
 
 #include <memory>

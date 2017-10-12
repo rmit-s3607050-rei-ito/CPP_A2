@@ -7,6 +7,7 @@
  * Name             : Pacific Thai
  * Student Number   : s3429648
  * -----------------------------------------------------------------------------
+ * Using skeleton code provided by Paul Miller
  */
 
 #include "model.h"
@@ -23,11 +24,11 @@ void draughts::model::model::player_exists(const std::string &pname)
   std::string playerName = "";
   std::string existingPlayerMessage = "";
 
-  while(player != player_list.end()) {
+  while (player != player_list.end()) {
     playerName = player->second;
 
     // Throw exception when player has not been found
-    if(pname == playerName) {
+    if (pname == playerName) {
       existingPlayerMessage = pname + " already exists in the roster";
       throw existingPlayerMessage;
     }
@@ -43,7 +44,7 @@ draughts::model::model::model(void) : red(RED), white(WHITE), player_count(0)
 // #################### Model instance related functions ####################
 draughts::model::model * draughts::model::model::get_instance(void)
 {
-  if(instance == nullptr)
+  if (instance == nullptr)
     instance = std::unique_ptr<model>(new model);
 
   return instance.get();
@@ -90,7 +91,7 @@ void draughts::model::model::start_game(int plr1, int plr2)
 
 void draughts::model::model::swap_current_player(void)
 {
-  if(current_player == &red)
+  if (current_player == &red)
     current_player = &white;
   else
     current_player = &red;
@@ -121,7 +122,7 @@ void draughts::model::model::make_move(int startx, int starty, int endx, int end
   // When all checks have been passed move the piece and swap players
   capturedToken = game_board.move_piece(startx, starty, endx, endy);
   // If move resulted in a piece being removed from the game
-  if(capturedToken) {
+  if (capturedToken) {
     // Add 1 to score and reduce number of pieces for other player by 1
     current_player->increment_score();
     reduce_player_pieces();
@@ -167,7 +168,7 @@ bool draughts::model::model::game_draw(void)
     oPlayerTokens);
 
   // When there are still moves available it is not a draw
-  if(possibleMove)
+  if (possibleMove)
     return false;
 
   return true;
@@ -245,10 +246,10 @@ std::string draughts::model::model::get_player_name(int id)
   std::string playerName = "[ERROR] - Player could not be found";
 
   // Iterate to find player
-  while(player != player_list.end()) {
+  while (player != player_list.end()) {
     player_id = player->first;
 
-    if(id == player_id) {
+    if (id == player_id) {
       playerName = player->second;
       break;
     }
@@ -289,7 +290,7 @@ char draughts::model::model::get_current_player_piece()
    * 3. Otherwise return N_O_TOKEN ('o')
    */
   team currentTeam = current_player->get_team();
-  if(currentTeam == RED)
+  if (currentTeam == RED)
     return RED_N_PIECE;
   else
     return WHITE_N_PIECE;
@@ -297,7 +298,7 @@ char draughts::model::model::get_current_player_piece()
 
 void draughts::model::model::reduce_player_pieces()
 {
-  if(current_player == &red)
+  if (current_player == &red)
     white.reduce_piece_count();
   else
     red.reduce_piece_count();
