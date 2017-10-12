@@ -137,8 +137,16 @@ void draughts::model::model::make_move(int startx, int starty, int endx, int end
   }
 }
 
+<<<<<<< HEAD
+bool draughts::model::model::check_individual_jump(int x, int y) {
+  // Ensure board gets the right coordintes
+  x -= ARRAY_DIFF;
+  y -= ARRAY_DIFF;
+
+=======
 bool draughts::model::model::check_individual_jump(int x, int y)
 {
+>>>>>>> 775368461894d218c6a26bbfe19e00b6e9f7986a
   // Clear the list of all previous possible jumps and check for individual jump
   game_board.reset_jump_list();
   // Check if the piece at the particular spot can jump again
